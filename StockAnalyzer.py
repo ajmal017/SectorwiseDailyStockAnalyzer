@@ -15,6 +15,7 @@ now = datetime.now()
 EXTENDED_DEBUG = True
 DEBUG_CONDITIONS = True
 
+
 class IntersectBasedAnalysisClass:
 
     stocksList = []
@@ -26,42 +27,24 @@ class IntersectBasedAnalysisClass:
     sectors_list = ['IBB', 'IYR', 'IYW', 'ICF', 'IYH', 'IYT', 'ITB', 'REM', 'IYF', 'IYE', 'IYJ',
                     'IHE', 'IHI', 'IDU', 'IYM', 'IYG', 'IAT', 'IYZ', 'SOXX', 'IYK', 'IHF', 'IYC',
                     'IEO', 'IEZ', 'ITA', 'REZ', 'IAI', 'IAK', 'FTY']
-
-    def getStocksList(self, i_update=False, i_listOrigin='NASDAQ', i_debug=False):
-        if (i_update):
-            refreshStocksList()
-        if (i_listOrigin == 'NASDAQ'):
-            listOfStocks = readFileContent('NASDAQ', '|', 0)
-            listOfStocks.drop(listOfStocks.tail(1).index, inplace=True)
-            self.numStocksInList = len(listOfStocks['Symbol'])
-            self.stocksList = random.sample(listOfStocks['Symbol'], self.numStocksInList)
-        else:
-            listOfStocks = readFileContent('OTHERS', '|', 0)
-            listOfStocks.drop(listOfStocks.tail(1).index, inplace=True)
-            self.numStocksInList = len(listOfStocks['ACT Symbol'])
-            self.stocksList = random.sample(listOfStocks['ACT Symbol'], self.numStocksInList)
-
-        # self.stocksList = ['SSP']
-        # self.numStocksInList = 1
-        if i_debug:
-            if EXTENDED_DEBUG:
-                print i_listOrigin, self.numStocksInList
-                print self.stocksList
-                # out_file.write(self.numStocksInList)
-                # out_file.write(i_listOrigin)
-                # out_file.write(self.stocksList)
+    sectors_to_analyze = []
+    sectors_rating = []
 
     def getSectorsData(self):
         for sector in self.sectors_list:
             if EXTENDED_DEBUG:
                 print '#### Start handling ', sector, ' ####'
-                self.out_file.write("#### Start handling %s ####\n" & (sector))
+                # self.out_file.write("#### Start handling %s ####\n" & (sector))
             self.stock.getData(i_symbol=sector, i_destDictKey=sector)
-            self.stock.getMovementType(i_destDictKey=sector)
+            self.stock.getMovementType(i_destDictKey=sector, i_freq='d')
+            self.stock.getMovementType(i_destDictKey=sector, i_freq='w')
+            self.stock.getMovementType(i_destDictKey=sector, i_freq='m')  # optional
             self.stock.reversalPointsDetector(i_destDictKey=sector)
+            self.stock.trend(i_destDictKey=sector, i_freq='d', i_debug=False)
+            self.stock.rs(i_freq='d', i_ref='SPY', i_src=sector)
             if EXTENDED_DEBUG:
                 print '#### End handling ', sector, ' ####'
-                self.out_file.write("#### End handling %s ####\n" & (sector))
+                # self.out_file.write("#### End handling %s ####\n" & (sector))
 
     def getSpyData(self):
         if EXTENDED_DEBUG:
@@ -70,9 +53,48 @@ class IntersectBasedAnalysisClass:
         self.stock.getData(i_symbol='SPY', i_destDictKey='SPY')
         self.stock.getMovementType(i_destDictKey='SPY')
         self.stock.reversalPointsDetector(i_destDictKey='SPY')
+        self.stock.trend(i_destDictKey='SPY', i_freq='d', i_debug=False)
         if EXTENDED_DEBUG:
             print "#### End handling SPY ####"
             self.out_file.write("#### End handling SPY ####\n")
+
+    def rateSectors(self):
+        idx = 0
+        for sector in self.sectors_list:
+            rating = 0
+            # rate 1
+            if self.stock.m_data['SPY']['analysis']['d']['trendType'] == self.stock.m_data[sector]['analysis']['d']['trendType'] and \
+               self.stock.m_data['SPY']['analysis']['d']['trendType'] > 0 and \
+               self.stock.m_data[sector]['analysis']['d']['trendType'] > 0:
+                rating = rating + 30
+            # rate 2
+            if self.stock.m_data[sector]['analysis']['d']['trendType'] == 2:  # up
+                if self.stock.m_data[sector]['analysis']['w']['moveType'] == 2:  # up
+                    rating = rating + 20
+                if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 2:  # up
+                    rating = rating + 5
+                if self.stock.m_data[sector]['analysis']['m']['moveType'] == 2:  # up
+                    rating = rating + 10
+                if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 2:  # up
+                    rating = rating + 5
+            elif self.stock.m_data[sector]['analysis']['d']['trendType'] == 1:  # down
+                if self.stock.m_data[sector]['analysis']['w']['moveType'] == 1:  # down
+                    rating = rating + 20
+                if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 1:  # down
+                    rating = rating + 5
+                if self.stock.m_data[sector]['analysis']['m']['moveType'] == 1:  # down
+                    rating = rating + 10
+                if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 1:  # down
+                    rating = rating + 5
+            if self.stock.m_data[sector]['analysis']['d']['rs'] >= RS_THS:
+                rating = rating + 30
+            self.sectors_rating.append(rating)
+            if rating > 0:
+                self.sectors_to_analyze.append(idx)
+            idx = idx + 1
+        if EXTENDED_DEBUG:
+            print self.sectors_rating
+            self.sectors_to_analyze
 
     def checkIfUpdate(self):
         # day = datetime.today().day
@@ -80,23 +102,17 @@ class IntersectBasedAnalysisClass:
         print lastEntryDate
         self.out_file.write("Last entry's day: %d/%d\n" % (lastEntryDate.month, lastEntryDate.day))
 
-    def analyze(self, i_analysisType):
+    def analyze(self):
         time.sleep(2)
-        if EXTENDED_DEBUG:
-            print "#### Start handling SPY ####"
-            self.out_file.write("#### Start handling SPY ####\n")
-        self.stock.getData(i_symbol='SPY', i_destDictKey='SPY')
-        self.stock.getMovementType(i_destDictKey='SPY')
-        self.stock.reversalPointsDetector(i_destDictKey='SPY')
-        if EXTENDED_DEBUG:
-            print "#### End handling SPY ####"
-            self.out_file.write("#### End handling SPY ####\n")
 
         f = open('SectorHoldings.dat', 'r')
         sectorHoldingsUrls = f.readlines()
 
-        for holding in sectorHoldingsUrls:
-            print holding
+        # for holding in sectorHoldingsUrls:
+        for index in self.sectors_to_analyze:
+            holding = sectorHoldingsUrls[index]
+            print index, holding
+
             idx = 0
             response = urllib2.urlopen(holding)
             cr = csv.reader(response)
@@ -111,6 +127,7 @@ class IntersectBasedAnalysisClass:
             df = DataFrame(data[1:-2], columns=data[0])
 
             self.stocksList = df['Ticker']
+            self.numStocksInList = len(self.stocksList)
             print self.stocksList
 
             for symbolName in self.stocksList:
@@ -159,7 +176,7 @@ class IntersectBasedAnalysisClass:
                 # stock.plotlyData(i_destDictKey='symbol')
 
                 l_conditions = [self.stock.m_data['symbol']['analysis']['d']['intersectInd'],               # condition 0
-                                self.stock.m_data['symbol']['analysis']['d']['rs'] >= RS_THS,               # condition 1
+                                self.stock.m_data['SPY']['analysis']['d']['rs'] >= RS_THS,               # condition 1
                                 ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
                                  (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1) and
                                  (self.stock.m_data['symbol']['analysis']['m']['moveType'] == 1)),          # condition 2
@@ -180,7 +197,7 @@ class IntersectBasedAnalysisClass:
 
                 if DEBUG_CONDITIONS:
                     self.out_file.write("Condition 1: IntersectInd=%d\n" % self.stock.m_data['symbol']['analysis']['d']['intersectInd'])
-                    self.out_file.write("Condition 2: RS=%f\n" % self.stock.m_data['symbol']['analysis']['d']['rs'])
+                    self.out_file.write("Condition 2: RS=%f\n" % self.stock.m_data['SPY']['analysis']['d']['rs'])
                     self.out_file.write("Condition 3: d_trendType=%d, w_moveType=%d, m_moveType=%d\n" %
                                         (self.stock.m_data['symbol']['analysis']['d']['trendType'],
                                          self.stock.m_data['symbol']['analysis']['w']['moveType'],
@@ -207,7 +224,7 @@ class IntersectBasedAnalysisClass:
                    l_conditions[6] and l_conditions[4]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
                     self.out_file.write("*[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                  l_conditions[0],
                                                                                                  l_conditions[1],
@@ -222,7 +239,7 @@ class IntersectBasedAnalysisClass:
                    (l_conditions[2] or l_conditions[3]):
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
                     self.out_file.write("**[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                   l_conditions[0],
                                                                                                   l_conditions[1],
@@ -238,7 +255,7 @@ class IntersectBasedAnalysisClass:
                    l_conditions[4]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
                     self.out_file.write("***[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                    l_conditions[0],
                                                                                                    l_conditions[1],
@@ -255,7 +272,7 @@ class IntersectBasedAnalysisClass:
                    l_conditions[5]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
                     self.out_file.write("****[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                     l_conditions[0],
                                                                                                     l_conditions[1],
@@ -272,7 +289,7 @@ class IntersectBasedAnalysisClass:
                    l_conditions[5] and l_conditions[6]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
                     self.out_file.write("*****[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                      l_conditions[0],
                                                                                                      l_conditions[1],
@@ -299,23 +316,23 @@ class IntersectBasedAnalysisClass:
             minute = datetime.today().minute
             # if (dayOfWeek >= 1) and (dayOfWeek <= 5) and ((hour+3) == 14) and (minute == 00):
             if (1):
-                self.getSectorsData()
-                self.out_file = open('output_'+str(now.day)+'_'+str(now.month)+'_'+str(now.year)+'_'+str(now.hour)+'.txt', "w")
+                filename = 'output_' + str(now.day) + '_' + str(now.month) + '_' + str(now.year) + '_' + str(now.hour) + '.txt'
+                self.out_file = open(filename, "w")
                 self.getSpyData()
+                self.getSectorsData()
                 self.checkIfUpdate()
-                self.getStocksList(i_listOrigin='NASDAQ', i_debug=True)
-                self.analyze(i_analysisType=ANALYSIS_TYPE)
-                # self.getStocksList(i_listOrigin='OTHERS', i_debug=True)
-                # self.analyze(i_analysisType=ANALYSIS_TYPE)
+                # narrow down the list of sectors for analysis
+                self.rateSectors()
+                self.analyze()
                 self.out_file.close()
             else:
-                print 'DaylOfWeek: ', dayOfWeek, ' hour: ', hour+3, ' minute: ', minute, 'sleep 60s - waiting...'
+                print 'DaylOfWeek: ', dayOfWeek, ' hour: ', hour + 3, ' minute: ', minute, 'sleep 60s - waiting...'
                 time.sleep(60)
 
 # ----------------- Main program -------------------
-#os.system("taskkill /im python.exe")
-#os.system("taskkill /im python.exe")
-#os.system("taskkill /im python.exe")
+# os.system("taskkill /im python.exe")
+# os.system("taskkill /im python.exe")
+# os.system("taskkill /im python.exe")
 isBaseAnalysis = IntersectBasedAnalysisClass()
 isBaseAnalysis.main()
 # isBaseAnalysis.restoreSymbol('stocks4Analysis')
