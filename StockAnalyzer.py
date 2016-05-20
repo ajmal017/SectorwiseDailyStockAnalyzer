@@ -11,6 +11,8 @@ from pandas import DataFrame
 
 ANALYSIS_TYPE = 'short'  # 'long'
 RS_THS = 0.7
+TREND_STRENGTH_THS = 0.5  # 0.0 for debug only
+ANALYSIS_THS = 0  # 0 used for debug only
 now = datetime.now()
 EXTENDED_DEBUG = True
 DEBUG_CONDITIONS = True
@@ -89,7 +91,7 @@ class IntersectBasedAnalysisClass:
             if self.stock.m_data[sector]['analysis']['d']['rs'] >= RS_THS:
                 rating = rating + 30
             self.sectors_rating.append(rating)
-            if rating > 0:
+            if rating > ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
             idx = idx + 1
         if EXTENDED_DEBUG:
@@ -192,7 +194,8 @@ class IntersectBasedAnalysisClass:
                                 ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
                                  (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1)),          # condition 7
                                 ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
-                                 (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1))          # condition 8
+                                 (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1)),          # condition 8
+                                self.stock.m_data['symbol']['analysis']['d']['trendStrength'] > TREND_STRENGTH_THS  # condition 9
                                 ]
 
                 if DEBUG_CONDITIONS:
@@ -208,6 +211,7 @@ class IntersectBasedAnalysisClass:
                                          self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'],
                                          self.stock.m_data['symbol']['analysis']['d']['trendType']))
                     self.out_file.write("Condition 6: riskR=%f\n" % self.stock.m_data['symbol']['analysis']['d']['riskRatio'])
+                    self.out_file.write("Condition 9: trendStrength=%f\n" % self.stock.m_data['symbol']['analysis']['d']['trendStrength'])
 
                 if EXTENDED_DEBUG:
                     print 'Conditions: ', l_conditions

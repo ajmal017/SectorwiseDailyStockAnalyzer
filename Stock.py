@@ -57,6 +57,7 @@ class StockClass:
                                             'localMaxs': np.empty(shape=0),
                                             'moveType': 0,  # 2 = up, 1 = down
                                             'trendType': 0,  # 2 = Up, 1 = down, 0 = init
+                                            'trendStrength': 0,
                                             'imin': [],
                                             'imax': [],
                                             'ema34': [],
@@ -788,6 +789,7 @@ class StockClass:
         self.m_data['symbol']['analysis']['d']['localMaxs'] = np.empty(shape=0)
         self.m_data['symbol']['analysis']['d']['moveType'] = 0
         self.m_data['symbol']['analysis']['d']['trendType'] = 0
+        self.m_data['symbol']['analysis']['d']['trendStrength'] = 0.0
         self.m_data['symbol']['analysis']['d']['imin'] = []
         self.m_data['symbol']['analysis']['d']['imax'] = []
         self.m_data['symbol']['analysis']['d']['ema34'] = []
@@ -1357,16 +1359,19 @@ class StockClass:
         l_imax = self.m_data[i_destDictKey]['analysis'][i_freq]['imax']
         upTrend = False
         downTrend = False
-        iminLastIdx = len(l_imin)-1
-        imaxLastIdx = len(l_imax)-1
+        trendStrength = 0
+        iminLastIdx = len(l_imin) - 1
+        imaxLastIdx = len(l_imax) - 1
 
         if (iminLastIdx > 0) and (imaxLastIdx > 0):
             if (l_imin[iminLastIdx] > l_imax[imaxLastIdx]):  # last is MIN
-                upTrend = (l_dataLow[l_imin[iminLastIdx]] > l_dataLow[l_imin[iminLastIdx-1]]) and \
-                          (l_dataHigh[l_imax[imaxLastIdx]] > l_dataHigh[l_imax[imaxLastIdx-1]])
+                upTrend = (l_dataLow[l_imin[iminLastIdx]] > l_dataLow[l_imin[iminLastIdx - 1]]) and \
+                          (l_dataHigh[l_imax[imaxLastIdx]] > l_dataHigh[l_imax[imaxLastIdx - 1]])
+                trendStrength = (l_dataLow[l_imin[iminLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]]) / (l_dataHigh[l_imax[imaxLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]])
             elif (l_imin[iminLastIdx] < l_imax[imaxLastIdx]):  # last is MAX
-                downTrend = (l_dataLow[l_imin[iminLastIdx]] < l_dataLow[l_imin[iminLastIdx-1]]) and \
-                            (l_dataHigh[l_imax[imaxLastIdx]] < l_dataHigh[l_imax[imaxLastIdx-1]])
+                downTrend = (l_dataLow[l_imin[iminLastIdx]] < l_dataLow[l_imin[iminLastIdx - 1]]) and \
+                            (l_dataHigh[l_imax[imaxLastIdx]] < l_dataHigh[l_imax[imaxLastIdx - 1]])
+                trendStrength = (l_dataHigh[l_imax[imaxLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]]) / (l_dataLow[l_imin[iminLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]])
             elif i_debug:
                 print "[Trend] ERROR_1"
                 i_out.write('[Trend] ERROR_1\n')
@@ -1374,6 +1379,11 @@ class StockClass:
         elif i_debug:
             print "[Trend] ERROR_2"
             i_out.write('[Trend] ERROR_2\n')
+
+        # save the trend strength only in case of symbol data analysis for the daily stock timeframe
+        if (upTrend or downTrend) and \
+           (i_destDictKey == 'symbol') and (i_freq == 'd'):
+            self.m_data[i_destDictKey]['analysis'][i_freq]['trendStrength'] = trendStrength
 
         if (upTrend) and (not downTrend):
             self.m_data[i_destDictKey]['analysis'][i_freq]['trendType'] = 2  # up-trend
