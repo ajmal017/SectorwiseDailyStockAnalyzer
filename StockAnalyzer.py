@@ -95,8 +95,7 @@ class IntersectBasedAnalysisClass:
                 self.sectors_to_analyze.append(idx)
             idx = idx + 1
         if EXTENDED_DEBUG:
-            print self.sectors_rating
-            self.sectors_to_analyze
+            print self.sectors_to_analyze
 
     def checkIfUpdate(self):
         # day = datetime.today().day
@@ -113,7 +112,7 @@ class IntersectBasedAnalysisClass:
         # for holding in sectorHoldingsUrls:
         for index in self.sectors_to_analyze:
             holding = sectorHoldingsUrls[index]
-            print index, holding
+            print holding
 
             idx = 0
             response = urllib2.urlopen(holding)
@@ -308,7 +307,6 @@ class IntersectBasedAnalysisClass:
                 if EXTENDED_DEBUG:
                     print '#### End handling [', symbolName, '] ####'
                     self.out_file.write("#### End handling [ %s ] ####\n" % symbolName)
-            break
 
     def restoreSymbol(self, i_symbol):
         self.stocks4Analysis = load_obj(i_symbol)
