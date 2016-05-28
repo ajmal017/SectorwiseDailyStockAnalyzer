@@ -95,12 +95,12 @@ class IntersectBasedAnalysisClass:
                 self.sectors_to_analyze.append(idx)
             idx = idx + 1
         if EXTENDED_DEBUG:
-            print self.sectors_to_analyze
+            print "Sectors to be analyzed: ", self.sectors_to_analyze
 
     def checkIfUpdate(self):
         # day = datetime.today().day
         lastEntryDate = self.stock.getDataDate()
-        print lastEntryDate
+        print "Last entry date: ", lastEntryDate
         self.out_file.write("Last entry's day: %d/%d\n" % (lastEntryDate.month, lastEntryDate.day))
 
     def analyze(self):
@@ -112,7 +112,8 @@ class IntersectBasedAnalysisClass:
         # for holding in sectorHoldingsUrls:
         for index in self.sectors_to_analyze:
             holding = sectorHoldingsUrls[index]
-            print holding
+            self.out_file.write("Sector: %s\n" % (self.sectors_to_analyze[index]))
+            print "Holding: ", holding
 
             idx = 0
             response = urllib2.urlopen(holding)
@@ -129,7 +130,7 @@ class IntersectBasedAnalysisClass:
 
             self.stocksList = df['Ticker']
             self.numStocksInList = len(self.stocksList)
-            print self.stocksList
+            print "Stocks list: ", self.stocksList
 
             for symbolName in self.stocksList:
                 # stock = Stock(name=symbolName)

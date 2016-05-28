@@ -1366,11 +1366,15 @@ class StockClass:
         if (iminLastIdx > 0) and (imaxLastIdx > 0):
             if (l_imin[iminLastIdx] > l_imax[imaxLastIdx]):  # last is MIN
                 upTrend = (l_dataLow[l_imin[iminLastIdx]] > l_dataLow[l_imin[iminLastIdx - 1]]) and \
-                          (l_dataHigh[l_imax[imaxLastIdx]] > l_dataHigh[l_imax[imaxLastIdx - 1]])
+                          (l_dataLow[l_imin[iminLastIdx - 1]] > l_dataLow[l_imin[iminLastIdx - 2]]) and \
+                          (l_dataHigh[l_imax[imaxLastIdx]] > l_dataHigh[l_imax[imaxLastIdx - 1]]) and \
+                          (l_dataHigh[l_imax[imaxLastIdx - 1]] > l_dataHigh[l_imax[imaxLastIdx - 2]])
                 trendStrength = (l_dataLow[l_imin[iminLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]]) / (l_dataHigh[l_imax[imaxLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]])
             elif (l_imin[iminLastIdx] < l_imax[imaxLastIdx]):  # last is MAX
                 downTrend = (l_dataLow[l_imin[iminLastIdx]] < l_dataLow[l_imin[iminLastIdx - 1]]) and \
-                            (l_dataHigh[l_imax[imaxLastIdx]] < l_dataHigh[l_imax[imaxLastIdx - 1]])
+                            (l_dataLow[l_imin[iminLastIdx - 1]] < l_dataLow[l_imin[iminLastIdx - 2]]) and \
+                            (l_dataHigh[l_imax[imaxLastIdx]] < l_dataHigh[l_imax[imaxLastIdx - 1]]) and \
+                            (l_dataHigh[l_imax[imaxLastIdx - 1]] < l_dataHigh[l_imax[imaxLastIdx - 2]])
                 trendStrength = (l_dataHigh[l_imax[imaxLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]]) / (l_dataLow[l_imin[iminLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]])
             elif i_debug:
                 print "[Trend] ERROR_1"
@@ -1432,7 +1436,7 @@ class StockClass:
                 newK = -1  # meaning that previous extrimum was minimum too
             else:
                 try:
-                    newK = l_dataLow[maxIndex+1:i_k+1].argmin()
+                    newK = l_dataLow[maxIndex + 1:i_k + 1].argmin()
                     newK = maxIndex + newK
                 except:
                     newK = i_k
@@ -1458,7 +1462,7 @@ class StockClass:
                 newK = -1  # meaning that previous extrimum was minimum too
             else:
                 try:
-                    newK = l_dataHigh[maxIndex+1:i_k+1].argmax()
+                    newK = l_dataHigh[maxIndex + 1:i_k + 1].argmax()
                     newK = maxIndex + newK
                 except:
                     newK = i_k
@@ -1543,7 +1547,7 @@ class StockClass:
         if len(i_imin) > 0 and len(i_imax) > 0:
             maxIndex = max(i_imin + i_imax)
             if self.m_data[i_destDictKey]['analysis'][i_freq]['trendType'] > 0:
-                self.m_data[i_destDictKey]['analysis'][i_freq]['proximity2TrendReversal'] = (dataLen-1-maxIndex) < 4
+                self.m_data[i_destDictKey]['analysis'][i_freq]['proximity2TrendReversal'] = (dataLen - 1 - maxIndex) < 4
             if (i_debug):
                 print '[proximityToTrendReversal]: ', 'dataLen: ', dataLen, ' maxIndex: ', maxIndex
                 i_out.write("[proximityToTrendReversal]: dataLen:%d, maxIndex:%d\n" % (dataLen, maxIndex))
