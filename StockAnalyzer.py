@@ -17,6 +17,11 @@ now = datetime.now()
 EXTENDED_DEBUG = True
 DEBUG_CONDITIONS = True
 
+RATE_1_SCORE = 20
+RATE_2_SCORE = 30
+RATE_3_SCORE = 25
+RATE_4_SCORE = 25
+
 
 class IntersectBasedAnalysisClass:
 
@@ -68,28 +73,47 @@ class IntersectBasedAnalysisClass:
             if self.stock.m_data['SPY']['analysis']['d']['trendType'] == self.stock.m_data[sector]['analysis']['d']['trendType'] and \
                self.stock.m_data['SPY']['analysis']['d']['trendType'] > 0 and \
                self.stock.m_data[sector]['analysis']['d']['trendType'] > 0:
-                rating = rating + 30
+                rating = rating + RATE_1_SCORE
             # rate 2
             if self.stock.m_data[sector]['analysis']['d']['trendType'] == 2:  # up
                 if self.stock.m_data[sector]['analysis']['w']['moveType'] == 2:  # up
-                    rating = rating + 20
+                    rating = rating + RATE_2_SCORE * 0.5
                 if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 2:  # up
-                    rating = rating + 5
+                    rating = rating + RATE_2_SCORE * 0.125
                 if self.stock.m_data[sector]['analysis']['m']['moveType'] == 2:  # up
-                    rating = rating + 10
+                    rating = rating + RATE_2_SCORE * 0.25
                 if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 2:  # up
-                    rating = rating + 5
+                    rating = rating + RATE_2_SCORE * 0.125
             elif self.stock.m_data[sector]['analysis']['d']['trendType'] == 1:  # down
                 if self.stock.m_data[sector]['analysis']['w']['moveType'] == 1:  # down
-                    rating = rating + 20
+                    rating = rating + RATE_2_SCORE * 0.5
                 if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 1:  # down
-                    rating = rating + 5
+                    rating = rating + RATE_2_SCORE * 0.125
                 if self.stock.m_data[sector]['analysis']['m']['moveType'] == 1:  # down
-                    rating = rating + 10
+                    rating = rating + RATE_2_SCORE * 0.25
                 if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 1:  # down
-                    rating = rating + 5
+                    rating = rating + RATE_2_SCORE * 0.125
+            # rate 3
             if self.stock.m_data[sector]['analysis']['d']['rs'] >= RS_THS:
-                rating = rating + 30
+                rating = rating + RATE_3_SCORE
+
+            # rate 4
+            if (self.stock.m_data[sector]['analysis']['d']['trendType'] == 2) and \
+               (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
+               (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
+                rating = rating + RATE_4_SCORE * 0.7
+            elif (self.stock.m_data[sector]['analysis']['d']['trendType'] == 1) and \
+                 (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1) and \
+                 (self.stock.m_data[sector]['analysis']['w']['moveType'] == 1):  # up
+                rating = rating + RATE_4_SCORE * 0.7
+
+            if (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
+               (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
+                rating = rating + RATE_4_SCORE * 0.3
+            elif (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1) and \
+                 (self.stock.m_data[sector]['analysis']['w']['moveType'] == 1):  # up
+                rating = rating + RATE_4_SCORE * 0.3
+
             self.sectors_rating.append(rating)
             if rating > ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
@@ -112,8 +136,9 @@ class IntersectBasedAnalysisClass:
         # for holding in sectorHoldingsUrls:
         for index in self.sectors_to_analyze:
             holding = sectorHoldingsUrls[index]
+            print "\n"
+            print "Holding[", index, "]: ", holding
             self.out_file.write("Sector: %s\n" % (self.sectors_to_analyze[index]))
-            print "Holding: ", holding
 
             idx = 0
             response = urllib2.urlopen(holding)
@@ -130,7 +155,7 @@ class IntersectBasedAnalysisClass:
 
             self.stocksList = df['Ticker']
             self.numStocksInList = len(self.stocksList)
-            print "Stocks list: ", self.stocksList
+            print "Stocks list: ", self.stocksList, "\n"
 
             for symbolName in self.stocksList:
                 # stock = Stock(name=symbolName)
