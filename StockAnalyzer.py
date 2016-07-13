@@ -118,8 +118,13 @@ class IntersectBasedAnalysisClass:
             if rating > ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
             idx = idx + 1
-        if EXTENDED_DEBUG:
-            print "Sectors to be analyzed: ", self.sectors_to_analyze
+        # if EXTENDED_DEBUG:
+            # print "Sectors to be analyzed: ", self.sectors_to_analyze
+            # print "Sectors ranking: ", self.sectors_rating
+            # self.out_file.write("Sectors to be analyzed and it rank:\n")
+            # for sector in self.sectors_to_analyze:
+            #     self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
+                
 
     def checkIfUpdate(self):
         # day = datetime.today().day
@@ -138,7 +143,8 @@ class IntersectBasedAnalysisClass:
             holding = sectorHoldingsUrls[index]
             print "\n"
             print "Holding[", index, "]: ", holding
-            self.out_file.write("Sector: %s\n" % (self.sectors_to_analyze[index]))
+            self.out_file.write("Holding[%d]: %s\n" % (index, holding))
+            self.out_file.write("Sector: %s, Rank: %f\n" % (self.sectors_list[index], self.sectors_rating[index]))
 
             idx = 0
             response = urllib2.urlopen(holding)
@@ -224,111 +230,173 @@ class IntersectBasedAnalysisClass:
                                 ]
 
                 if DEBUG_CONDITIONS:
-                    self.out_file.write("Condition 1: IntersectInd=%d\n" % self.stock.m_data['symbol']['analysis']['d']['intersectInd'])
-                    self.out_file.write("Condition 2: RS=%f\n" % self.stock.m_data['SPY']['analysis']['d']['rs'])
-                    self.out_file.write("Condition 3: d_trendType=%d, w_moveType=%d, m_moveType=%d\n" %
-                                        (self.stock.m_data['symbol']['analysis']['d']['trendType'],
-                                         self.stock.m_data['symbol']['analysis']['w']['moveType'],
-                                         self.stock.m_data['symbol']['analysis']['m']['moveType']))
+                    self.out_file.write("Condition 0: IntersectInd=%d\n" % self.stock.m_data['symbol']['analysis']['d']['intersectInd'])
+                    self.out_file.write("Condition 1: RS=%f\n" % self.stock.m_data['SPY']['analysis']['d']['rs'])
+                    self.out_file.write("Condition 2/3: d_trendType=%d, w_moveType=%d, m_moveType=%d\n" %
+                                   (self.stock.m_data['symbol']['analysis']['d']['trendType'],
+                                    self.stock.m_data['symbol']['analysis']['w']['moveType'],
+                                    self.stock.m_data['symbol']['analysis']['m']['moveType']))
                     self.out_file.write("Condition 4: proximity=%d\n" % self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal'])
                     self.out_file.write("Condition 5: lastWHigh=%f, lastWLow=%f, trendType=%d\n" %
-                                        (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'],
-                                         self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'],
-                                         self.stock.m_data['symbol']['analysis']['d']['trendType']))
+                                   (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'],
+                                    self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'],
+                                    self.stock.m_data['symbol']['analysis']['d']['trendType']))
                     self.out_file.write("Condition 6: riskR=%f\n" % self.stock.m_data['symbol']['analysis']['d']['riskRatio'])
-                    self.out_file.write("Condition 9: trendStrength=%f\n" % self.stock.m_data['symbol']['analysis']['d']['trendStrength'])
+                    self.out_file.write("Condition 7/8: d_trendType=%d, w_moveType=%d\n" %
+                                   (self.stock.m_data['symbol']['analysis']['d']['trendType'],
+                                    self.stock.m_data['symbol']['analysis']['w']['moveType']))
+                    self.out_file.write("Condition 9: trendStrength=%f, TREND_STRENGTH_THS=%f\n" % (self.stock.m_data['symbol']['analysis']['d']['trendStrength'],TREND_STRENGTH_THS))
+                    self.out_file.write("SPY: d_trendType=%d, d_moveType=%d, w_moveType=%d, m_moveType=%d\n" %
+                                   (self.stock.m_data['SPY']['analysis']['d']['trendType'],
+                                    self.stock.m_data['SPY']['analysis']['d']['moveType'],
+                                    self.stock.m_data['SPY']['analysis']['w']['moveType'],
+                                    self.stock.m_data['SPY']['analysis']['m']['moveType']))
 
                 if EXTENDED_DEBUG:
                     print 'Conditions: ', l_conditions
-                    self.out_file.write("Conditions: %d %d %d %d %d %d %d-> [%d/%d]\n" % (l_conditions[0],
-                                                                                          l_conditions[1],
-                                                                                          l_conditions[2],
-                                                                                          l_conditions[3],
-                                                                                          l_conditions[4],
-                                                                                          l_conditions[5],
-                                                                                          l_conditions[6],
-                                                                                          sum(l_conditions),
-                                                                                          len(l_conditions)))
+                    self.out_file.write("Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (l_conditions[0],
+                                                                                     l_conditions[1],
+                                                                                     l_conditions[2],
+                                                                                     l_conditions[3],
+                                                                                     l_conditions[4],
+                                                                                     l_conditions[5],
+                                                                                     l_conditions[6],
+                                                                                     l_conditions[7],
+                                                                                     l_conditions[8],
+                                                                                     l_conditions[9],
+                                                                                     sum(l_conditions),
+                                                                                     len(l_conditions)))
                 if (l_conditions[7] or l_conditions[8]) and \
                    l_conditions[6] and l_conditions[4]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
-                    self.out_file.write("*[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
-                                                                                                 l_conditions[0],
-                                                                                                 l_conditions[1],
-                                                                                                 l_conditions[2],
-                                                                                                 l_conditions[3],
-                                                                                                 l_conditions[4],
-                                                                                                 l_conditions[5],
-                                                                                                 l_conditions[6],
-                                                                                                 sum(l_conditions),
-                                                                                                 len(l_conditions)))
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 1][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                            l_conditions[0],
+                                                                                            l_conditions[1],
+                                                                                            l_conditions[2],
+                                                                                            l_conditions[3],
+                                                                                            l_conditions[4],
+                                                                                            l_conditions[5],
+                                                                                            l_conditions[6],
+                                                                                            l_conditions[7],
+                                                                                            l_conditions[8],
+                                                                                            l_conditions[9],
+                                                                                            sum(l_conditions),
+                                                                                            len(l_conditions)))
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]):
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
-                    self.out_file.write("**[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
-                                                                                                  l_conditions[0],
-                                                                                                  l_conditions[1],
-                                                                                                  l_conditions[2],
-                                                                                                  l_conditions[3],
-                                                                                                  l_conditions[4],
-                                                                                                  l_conditions[5],
-                                                                                                  l_conditions[6],
-                                                                                                  sum(l_conditions),
-                                                                                                  len(l_conditions)))
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 2][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                             l_conditions[0],
+                                                                                             l_conditions[1],
+                                                                                             l_conditions[2],
+                                                                                             l_conditions[3],
+                                                                                             l_conditions[4],
+                                                                                             l_conditions[5],
+                                                                                             l_conditions[6],
+                                                                                             l_conditions[7],
+                                                                                             l_conditions[8],
+                                                                                             l_conditions[9],
+                                                                                             sum(l_conditions),
+                                                                                             len(l_conditions)))
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]) and \
                    l_conditions[4]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
-                    self.out_file.write("***[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
-                                                                                                   l_conditions[0],
-                                                                                                   l_conditions[1],
-                                                                                                   l_conditions[2],
-                                                                                                   l_conditions[3],
-                                                                                                   l_conditions[4],
-                                                                                                   l_conditions[5],
-                                                                                                   l_conditions[6],
-                                                                                                   sum(l_conditions),
-                                                                                                   len(l_conditions)))
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 3][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                              l_conditions[0],
+                                                                                              l_conditions[1],
+                                                                                              l_conditions[2],
+                                                                                              l_conditions[3],
+                                                                                              l_conditions[4],
+                                                                                              l_conditions[5],
+                                                                                              l_conditions[6],
+                                                                                              l_conditions[7],
+                                                                                              l_conditions[8],
+                                                                                              l_conditions[9],
+                                                                                              sum(l_conditions),
+                                                                                              len(l_conditions)))
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]) and \
                    l_conditions[4] and \
                    l_conditions[5]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
-                    self.out_file.write("****[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
-                                                                                                    l_conditions[0],
-                                                                                                    l_conditions[1],
-                                                                                                    l_conditions[2],
-                                                                                                    l_conditions[3],
-                                                                                                    l_conditions[4],
-                                                                                                    l_conditions[5],
-                                                                                                    l_conditions[6],
-                                                                                                    sum(l_conditions),
-                                                                                                    len(l_conditions)))
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 4][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                               l_conditions[0],
+                                                                                               l_conditions[1],
+                                                                                               l_conditions[2],
+                                                                                               l_conditions[3],
+                                                                                               l_conditions[4],
+                                                                                               l_conditions[5],
+                                                                                               l_conditions[6],
+                                                                                               l_conditions[7],
+                                                                                               l_conditions[8],
+                                                                                               l_conditions[9],
+                                                                                               sum(l_conditions),
+                                                                                               len(l_conditions)))
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]) and \
                    l_conditions[4] and \
                    l_conditions[5] and l_conditions[6]:
                     # save_obj(self.stock, symbolName)
                     self.stocks4Analysis.append(symbolName)
-                    save_obj(self.stocks4Analysis, 'stocks4Analysis_' + ANALYSIS_TYPE)
-                    self.out_file.write("*****[%s] Conditions: %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
-                                                                                                     l_conditions[0],
-                                                                                                     l_conditions[1],
-                                                                                                     l_conditions[2],
-                                                                                                     l_conditions[3],
-                                                                                                     l_conditions[4],
-                                                                                                     l_conditions[5],
-                                                                                                     l_conditions[6],
-                                                                                                     sum(l_conditions),
-                                                                                                     len(l_conditions)))
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 5][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                                l_conditions[0],
+                                                                                                l_conditions[1],
+                                                                                                l_conditions[2],
+                                                                                                l_conditions[3],
+                                                                                                l_conditions[4],
+                                                                                                l_conditions[5],
+                                                                                                l_conditions[6],
+                                                                                                l_conditions[7],
+                                                                                                l_conditions[8],
+                                                                                                l_conditions[9],
+                                                                                                sum(l_conditions),
+                                                                                                len(l_conditions)))
+                if (l_conditions[7] or l_conditions[8]) and \
+                    l_conditions[6] and l_conditions[4]:
+                    # save_obj(self.stock, symbolName)
+                    self.stocks4Analysis.append(symbolName)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 6][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                             l_conditions[0],
+                                                                                             l_conditions[1],
+                                                                                             l_conditions[2],
+                                                                                             l_conditions[3],
+                                                                                             l_conditions[4],
+                                                                                             l_conditions[5],
+                                                                                             l_conditions[6],
+                                                                                             l_conditions[7],
+                                                                                             l_conditions[8],
+                                                                                             l_conditions[9],
+                                                                                             sum(l_conditions),
+                                                                                             len(l_conditions)))
+                if (l_conditions[7] or l_conditions[8]) and \
+                    l_conditions[4]:
+                    # save_obj(self.stock, symbolName)
+                    self.stocks4Analysis.append(symbolName)
+                    save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
+                    self.out_file.write("[COND 7][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
+                                                                                             l_conditions[0],
+                                                                                             l_conditions[1],
+                                                                                             l_conditions[2],
+                                                                                             l_conditions[3],
+                                                                                             l_conditions[4],
+                                                                                             l_conditions[5],
+                                                                                             l_conditions[6],
+                                                                                             l_conditions[7],
+                                                                                             l_conditions[8],
+                                                                                             l_conditions[9],
+                                                                                             sum(l_conditions),
+                                                                                             len(l_conditions)))
 
                 if EXTENDED_DEBUG:
                     print '#### End handling [', symbolName, '] ####'
