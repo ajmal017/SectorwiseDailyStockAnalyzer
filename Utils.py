@@ -22,7 +22,7 @@ def load_obj(name):
 
 
 def refreshStocksList():
-    print "Connecting to FTP and retrieving stocks list..."
+    print("Connecting to FTP and retrieving stocks list...")
     ftp = FTP('ftp.nasdaqtrader.com')
     ftp.login()
     ftp.cwd('SymbolDirectory')
@@ -68,7 +68,7 @@ def mail_zipped_files(send_from, send_to, subject, text, filename, server="smtp.
     if isTls:
         mailServer.starttls()
     mailServer.ehlo()
-    print username, password
+    print(username, password)
     mailServer.login(username, password)
     mailServer.sendmail(send_from, send_to, msg.as_string())
     mailServer.close()

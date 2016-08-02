@@ -1,10 +1,9 @@
 from Stock import *
 from Utils import *
 import time
-import gc
-import thread
-import random
-import os
+# import gc
+# import random
+# import os
 import csv
 import urllib2
 from pandas import DataFrame
@@ -21,6 +20,11 @@ RATE_1_SCORE = 20
 RATE_2_SCORE = 30
 RATE_3_SCORE = 25
 RATE_4_SCORE = 25
+
+iSHARES_SECTORS = "iShares"
+nINESECTORS = "nineSectors"
+
+SECTORS_SET = nineSectors
 
 
 class IntersectBasedAnalysisClass:
@@ -40,7 +44,7 @@ class IntersectBasedAnalysisClass:
     def getSectorsData(self):
         for sector in self.sectors_list:
             if EXTENDED_DEBUG:
-                print '#### Start handling ', sector, ' ####'
+                print('#### Start handling ', sector, ' ####')
                 # self.out_file.write("#### Start handling %s ####\n" & (sector))
             self.stock.getData(i_symbol=sector, i_destDictKey=sector)
             self.stock.getMovementType(i_destDictKey=sector, i_freq='d')
@@ -50,19 +54,19 @@ class IntersectBasedAnalysisClass:
             self.stock.trend(i_destDictKey=sector, i_freq='d', i_debug=False)
             self.stock.rs(i_freq='d', i_ref='SPY', i_src=sector)
             if EXTENDED_DEBUG:
-                print '#### End handling ', sector, ' ####'
+                print('#### End handling ', sector, ' ####')
                 # self.out_file.write("#### End handling %s ####\n" & (sector))
 
     def getSpyData(self):
         if EXTENDED_DEBUG:
-            print "#### Start handling SPY ####"
+            print("#### Start handling SPY ####")
             self.out_file.write("#### Start handling SPY ####\n")
         self.stock.getData(i_symbol='SPY', i_destDictKey='SPY')
         self.stock.getMovementType(i_destDictKey='SPY')
         self.stock.reversalPointsDetector(i_destDictKey='SPY')
         self.stock.trend(i_destDictKey='SPY', i_freq='d', i_debug=False)
         if EXTENDED_DEBUG:
-            print "#### End handling SPY ####"
+            print("#### End handling SPY ####")
             self.out_file.write("#### End handling SPY ####\n")
 
     def rateSectors(self):
@@ -118,10 +122,10 @@ class IntersectBasedAnalysisClass:
             if rating > ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
             idx = idx + 1
-        
+
         if EXTENDED_DEBUG:
-            print "Sectors to be analyzed: ", self.sectors_to_analyze
-            print "Sectors ranking: ", self.sectors_rating
+            print("Sectors to be analyzed: ", self.sectors_to_analyze)
+            print("Sectors ranking: ", self.sectors_rating)
             # self.out_file.write("Sectors to be analyzed and it rank:\n")
             # for sector in self.sectors_to_analyze:
             #     self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
@@ -130,7 +134,7 @@ class IntersectBasedAnalysisClass:
     def checkIfUpdate(self):
         # day = datetime.today().day
         lastEntryDate = self.stock.getDataDate()
-        print "Last entry date: ", lastEntryDate
+        print("Last entry date: ", lastEntryDate)
         self.out_file.write("Last entry's day: %d/%d\n" % (lastEntryDate.month, lastEntryDate.day))
 
     def analyze(self):
@@ -142,8 +146,8 @@ class IntersectBasedAnalysisClass:
         # for holding in sectorHoldingsUrls:
         for index in self.sectors_to_analyze:
             holding = sectorHoldingsUrls[index]
-            print "\n"
-            print "Holding[", index, "]: ", holding
+            print("\n")
+            print("Holding[", index, "]: ", holding)
             self.out_file.write("Holding[%d]: %s\n" % (index, holding))
             self.out_file.write("Sector: %s, Rank: %f\n" % (self.sectors_list[index], self.sectors_rating[index]))
 
@@ -153,6 +157,7 @@ class IntersectBasedAnalysisClass:
             # cr = pd.read_csv(response)
             data = []
             copyfromhere = False
+
             for row in cr:
                 if 'Ticker' in row:
                     copyfromhere = True
@@ -162,7 +167,7 @@ class IntersectBasedAnalysisClass:
 
             self.stocksList = df['Ticker']
             self.numStocksInList = len(self.stocksList)
-            print "Stocks list: ", self.stocksList, "\n"
+            print("Stocks list: ", self.stocksList, "\n")
 
             for symbolName in self.stocksList:
                 # stock = Stock(name=symbolName)
@@ -171,10 +176,10 @@ class IntersectBasedAnalysisClass:
                 # get data of required symbol
                 idx = idx + 1
                 if EXTENDED_DEBUG:
-                    print '#### [', idx, '/', self.numStocksInList, ']: Start handling [', symbolName, '] ####'
+                    print('#### [', idx, '/', self.numStocksInList, ']: Start handling [', symbolName, '] ####')
                     self.out_file.write("#### [ %d / %d ]: Start handling [ %s ] ####\n" % (idx, self.numStocksInList, symbolName))
                 else:
-                    print '[', idx, '/', self.numStocksInList, ']'
+                    print('[', idx, '/', self.numStocksInList, ']')
                     self.out_file.write("[ %d / %d ]\n" % (idx, self.numStocksInList))
                 try:
                     self.stock.getData(i_symbol=symbolName, i_destDictKey='symbol')
@@ -182,7 +187,7 @@ class IntersectBasedAnalysisClass:
                     self.erroneousStocks.append(symbolName)
                     save_obj(self.erroneousStocks, 'erroneousStocks_' + ANALYSIS_TYPE)
                     if EXTENDED_DEBUG:
-                        print '!!!! GetData ERROR !!!!'
+                        print('!!!! GetData ERROR !!!!')
                         self.out_file.write('!!!! GetData ERROR !!!!\n')
                     continue
 
@@ -254,7 +259,7 @@ class IntersectBasedAnalysisClass:
                                     self.stock.m_data['SPY']['analysis']['m']['moveType']))
 
                 if EXTENDED_DEBUG:
-                    print 'Conditions: ', l_conditions
+                    print('Conditions: ', l_conditions)
                     self.out_file.write("Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (l_conditions[0],
                                                                                      l_conditions[1],
                                                                                      l_conditions[2],
@@ -400,7 +405,7 @@ class IntersectBasedAnalysisClass:
                                                                                              len(l_conditions)))
 
                 if EXTENDED_DEBUG:
-                    print '#### End handling [', symbolName, '] ####'
+                    print('#### End handling [', symbolName, '] ####')
                     self.out_file.write("#### End handling [ %s ] ####\n" % symbolName)
 
     def restoreSymbol(self, i_symbol):
@@ -423,7 +428,7 @@ class IntersectBasedAnalysisClass:
                 self.analyze()
                 self.out_file.close()
             else:
-                print 'DaylOfWeek: ', dayOfWeek, ' hour: ', hour + 3, ' minute: ', minute, 'sleep 60s - waiting...'
+                print('DaylOfWeek: ', dayOfWeek, ' hour: ', hour + 3, ' minute: ', minute, 'sleep 60s - waiting...')
                 time.sleep(60)
 
 # ----------------- Main program -------------------

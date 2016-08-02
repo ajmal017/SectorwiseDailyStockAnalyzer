@@ -22,7 +22,8 @@ import calendar
 import plotly
 from plotly.tools import FigureFactory as FF
 from plotly.graph_objs import *
-plotly.offline.init_notebook_mode()
+
+plotly.offline.init_notebook_mode(connected=True)
 
 plt.style.use('ggplot')
 
@@ -41,7 +42,6 @@ TEMP = timedelta(days=150)
 
 # trendStrength
 featuresTblColNames = ['trend', 'weeklyMove', 'monthlyMove', 'emaIntersection', 'currCloseBeyondLastExt', 'proximity2TrendReversal', 'riskRatio']
-
 
 class StockClass:
 
@@ -1092,7 +1092,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
                     if i_debug:
-                        print "3-4-5", k, searchMinima, searchMaxima
+                        print("3-4-5", k, searchMinima, searchMaxima)
                         i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1105,7 +1105,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
                     if i_debug:
-                        print "Key-Reversal", k, searchMinima, searchMaxima
+                        print("Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1117,7 +1117,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
                     if i_debug:
-                        print "Outside-Key-Reversal", k, searchMinima, searchMaxima
+                        print("Outside-Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Outside-Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1132,7 +1132,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
                     if i_debug:
-                        print "#4", k, searchMinima, searchMaxima
+                        print("#4", k, searchMinima, searchMaxima)
                         i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1150,7 +1150,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
                     if i_debug:
-                        print "#5", k, searchMinima, searchMaxima
+                        print("#5", k, searchMinima, searchMaxima)
                         i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1167,7 +1167,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
                     if i_debug:
-                        print "#6", k, searchMinima, searchMaxima
+                        print("#6", k, searchMinima, searchMaxima)
                         i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1191,7 +1191,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
                     if i_debug:
-                        print "3-4-5", k, searchMinima, searchMaxima
+                        print("3-4-5", k, searchMinima, searchMaxima)
                         i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1204,7 +1204,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
                     if i_debug:
-                        print "Key-Reversal", k, searchMinima, searchMaxima
+                        print("Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1216,7 +1216,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
                     if i_debug:
-                        print "Outside-Key-Reversal", k, searchMinima, searchMaxima
+                        print("Outside-Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Outside-Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1232,7 +1232,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
                     if i_debug:
-                        print "#4", k, searchMinima, searchMaxima
+                        print("#4", k, searchMinima, searchMaxima)
                         i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1250,7 +1250,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
                     if i_debug:
-                        print "#5", k, searchMinima, searchMaxima
+                        print("#5", k, searchMinima, searchMaxima)
                         i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1267,7 +1267,7 @@ class StockClass:
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
                     if i_debug:
-                        print "#6", k, searchMinima, searchMaxima
+                        print("#6", k, searchMinima, searchMaxima)
                         i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
@@ -1275,8 +1275,8 @@ class StockClass:
             k = k + 1 + innerCandleLen
 
         if i_debug:
-            print "[reversalPointsDetector] - imin: ", self.m_data[i_destDictKey]['analysis'][i_freq]['imin']
-            print "[reversalPointsDetector] - imax: ", self.m_data[i_destDictKey]['analysis'][i_freq]['imax']
+            print("[reversalPointsDetector] - imin: ", self.m_data[i_destDictKey]['analysis'][i_freq]['imin'])
+            print("[reversalPointsDetector] - imax: ", self.m_data[i_destDictKey]['analysis'][i_freq]['imax'])
             i_out.write("[reversalPointsDetector] - imin:\n".join(self.m_data[i_destDictKey]['analysis'][i_freq]['imin']))
             i_out.write("[reversalPointsDetector] - imax:\n".join(self.m_data[i_destDictKey]['analysis'][i_freq]['imax']))
 
@@ -1289,8 +1289,8 @@ class StockClass:
             sectorDataClose = self.m_data[i_ref]['data'][i_freq]['Close'][:i_dataWidth]
 
         indexDiff = min(floor(len(sectorDataClose) / 4), floor(len(symbolDataClose) / 4))
-        indicesSectorData = range(len(sectorDataClose) - int(indexDiff), len(sectorDataClose))
-        indicesSymbolData = range(len(symbolDataClose) - int(indexDiff), len(symbolDataClose))
+        indicesSectorData = [range(len(sectorDataClose) - int(indexDiff), len(sectorDataClose))]
+        indicesSymbolData = [range(len(symbolDataClose) - int(indexDiff), len(symbolDataClose))]
 
         u1 = sum(sectorDataClose[indicesSectorData]) / indexDiff
         u2 = sum(symbolDataClose[indicesSymbolData]) / indexDiff
@@ -1317,7 +1317,7 @@ class StockClass:
 
         if (len(values) <= MIN_VECTOR_LEN):
             if i_debug:
-                print '[EMA] padding arrays'
+                print('[EMA] padding arrays')
                 i_out.write('[EMA] padding arrays\n')
             z = np.zeros(MIN_VECTOR_LEN)
             v = []
@@ -1377,11 +1377,11 @@ class StockClass:
                             (l_dataHigh[l_imax[imaxLastIdx - 1]] < l_dataHigh[l_imax[imaxLastIdx - 2]])
                 trendStrength = (l_dataHigh[l_imax[imaxLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]]) / (l_dataLow[l_imin[iminLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]])
             elif i_debug:
-                print "[Trend] ERROR_1"
+                print("[Trend] ERROR_1")
                 i_out.write('[Trend] ERROR_1\n')
 
         elif i_debug:
-            print "[Trend] ERROR_2"
+            print("[Trend] ERROR_2")
             i_out.write('[Trend] ERROR_2\n')
 
         # save the trend strength only in case of symbol data analysis for the daily stock timeframe
@@ -1396,7 +1396,7 @@ class StockClass:
         else:
             self.m_data[i_destDictKey]['analysis'][i_freq]['trendType'] = 0
         if i_debug:
-            print "[trend] - Trend type: ", self.m_data[i_destDictKey]['analysis'][i_freq]['trendType']
+            print("[trend] - Trend type: ", self.m_data[i_destDictKey]['analysis'][i_freq]['trendType'])
             i_out.write("[trend] - Trend type: %d\n" % (self.m_data[i_destDictKey]['analysis'][i_freq]['trendType']))
 
     def emaIntersect(self, i_destDictKey='symbol', i_freq='d', i_type='short', i_dataWidth=0):
@@ -1491,13 +1491,13 @@ class StockClass:
             self.m_data[i_destDictKey]['analysis']['d']['lastWeeklyHigh'] = l_data['d']['High'].iloc[-1] >= l_data['w']['High'].iloc[-1]
             self.m_data[i_destDictKey]['analysis']['d']['lastWeeklyLow'] = l_data['d']['Low'].iloc[-1] <= l_data['w']['Low'].iloc[-1]
             if i_debug:
-                print "[findLastTimeFrame][d] - StartIdx: ", startIdx, "EndIdx: ", endIdx
+                print("[findLastTimeFrame][d] - StartIdx: ", startIdx, "EndIdx: ", endIdx)
                 i_out.write("[findLastTimeFrame] - StartIdx: %d, EndIdx: %d\n" % (startIdx, EndIdx))
         elif i_destFreq == 'm':
             self.m_data[i_destDictKey]['analysis']['w']['lastWeeklyHigh'] = l_data['w']['High'].iloc[-1] >= l_data['m']['High'].iloc[-1]
             self.m_data[i_destDictKey]['analysis']['w']['lastWeeklyLow'] = l_data['w']['Low'].iloc[-1] <= l_data['m']['Low'].iloc[-1]
             if i_debug:
-                print "[findLastTimeFrame][w] - StartIdx: ", startIdx, "EndIdx: ", endIdx
+                print("[findLastTimeFrame][w] - StartIdx: ", startIdx, "EndIdx: ", endIdx)
                 i_out.write("[findLastTimeFrame] - StartIdx: %d, EndIdx: %d\n" % (startIdx, EndIdx))
 
     # Construct the "features" dataframe based on information in "analysis" dataframe
@@ -1515,23 +1515,23 @@ class StockClass:
         self.m_features['riskRatio'][i_idx] = l_data['riskRatio']
 
         if i_debug:
-            print "[updatToFeaturesDB]: ", i_idx, \
-                self.m_features.trend[i_idx], \
-                self.m_features.weeklyMove[i_idx], \
-                self.m_features.monthlyMove[i_idx], \
-                self.m_features.emaIntersection[i_idx], \
-                self.m_features.currCloseBeyondLastExt[i_idx], \
-                self.m_features.proximity2TrendReversal[i_idx], \
-                self.m_features.riskRatio[i_idx]
-            i_out.write("[updatToFeaturesDB]: idx:%d, trend:%d, wMove:%d, mMove:%d, emaI:%d, \
-                        currCloseBeyondLastExt:%d, proximity2TrendReversal:%d, riskRatio:%f\n" % (i_idx,
-                        self.m_features.trend[i_idx],
-                        self.m_features.weeklyMove[i_idx],
-                        self.m_features.monthlyMove[i_idx],
-                        self.m_features.emaIntersection[i_idx],
-                        self.m_features.currCloseBeyondLastExt[i_idx],
-                        self.m_features.proximity2TrendReversal[i_idx],
-                        self.m_features.riskRatio[i_idx]))
+            print("[updatToFeaturesDB]: ", i_idx,
+                  self.m_features.trend[i_idx],
+                  self.m_features.weeklyMove[i_idx],
+                  self.m_features.monthlyMove[i_idx],
+                  self.m_features.emaIntersection[i_idx],
+                  self.m_features.currCloseBeyondLastExt[i_idx],
+                  self.m_features.proximity2TrendReversal[i_idx],
+                  self.m_features.riskRatio[i_idx])
+            i_out.write("[updatToFeaturesDB]: idx:%d, trend:%d, wMove:%d, mMove:%d, emaI:%d, currCloseBeyondLastExt:%d, proximity2TrendReversal:%d, riskRatio:%f\n"
+                        % (i_idx,
+                           self.m_features.trend[i_idx],
+                           self.m_features.weeklyMove[i_idx],
+                           self.m_features.monthlyMove[i_idx],
+                           self.m_features.emaIntersection[i_idx],
+                           self.m_features.currCloseBeyondLastExt[i_idx],
+                           self.m_features.proximity2TrendReversal[i_idx],
+                           self.m_features.riskRatio[i_idx]))
 
     def proximityToTrendReversal(self, i_destDictKey, i_freq='d', i_debug=0, i_dataWidth=0, i_out=None):
         if (i_dataWidth == 0):
@@ -1549,11 +1549,11 @@ class StockClass:
             if self.m_data[i_destDictKey]['analysis'][i_freq]['trendType'] > 0:
                 self.m_data[i_destDictKey]['analysis'][i_freq]['proximity2TrendReversal'] = (dataLen - 1 - maxIndex) < 4
             if (i_debug):
-                print '[proximityToTrendReversal]: ', 'dataLen: ', dataLen, ' maxIndex: ', maxIndex
+                print('[proximityToTrendReversal]: ', 'dataLen: ', dataLen, ' maxIndex: ', maxIndex)
                 i_out.write("[proximityToTrendReversal]: dataLen:%d, maxIndex:%d\n" % (dataLen, maxIndex))
         else:
             if i_debug:
-                print '[proximityToTrendReversal] ERROR'
+                print('[proximityToTrendReversal] ERROR')
                 i_out.write("[proximityToTrendReversal] ERROR\n")
             self.m_data[i_destDictKey]['analysis'][i_freq]['proximity2TrendReversal'] = False
 
@@ -1567,16 +1567,16 @@ class StockClass:
                 minIdx = analysisData['imin'][-1]
                 R = 1 - data['Low'].iloc[minIdx] / data['Close'].iloc[-1]
                 if i_debug:
-                    print "R_data: ", data['Low'].iloc[minIdx], data['Close'].iloc[-1]
+                    print("R_data: ", data['Low'].iloc[minIdx], data['Close'].iloc[-1])
                     i_out.write("R_data: (1 - %f) : %f\n" % (data['Low'].iloc[minIdx], data['Close'].iloc[-1]))
             elif analysisData['trendType'] == 1:
                 maxIdx = analysisData['imax'][-1]
                 R = 1 - data['High'].iloc[maxIdx] / data['Close'].iloc[-1]
                 if i_debug:
-                    print "R_data: ", data['High'].iloc[maxIdx], data['Close'].iloc[-1]
+                    print("R_data: ", data['High'].iloc[maxIdx], data['Close'].iloc[-1])
                     i_out.write("R_data: (1 - %f) : %f\n" % (data['High'].iloc[maxIdx], data['Close'].iloc[-1]))
         self.m_data[i_destDictKey]['analysis'][i_freq]['riskRatio'] = abs(R)
         if i_debug:
-            print "R: ", R
+            print("R: ", R)
             i_out.write("R: %f\n" % (R))
 
