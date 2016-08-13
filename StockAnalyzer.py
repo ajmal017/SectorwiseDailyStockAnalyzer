@@ -5,8 +5,9 @@ import time
 # import random
 # import os
 import csv
-import urllib2
+import urllib
 from pandas import DataFrame
+from finviz import getFinviz
 
 ANALYSIS_TYPE = 'short'  # 'long'
 RS_THS = 0.7
@@ -24,7 +25,7 @@ RATE_4_SCORE = 25
 iSHARES_SECTORS = "iShares"
 nINESECTORS = "nineSectors"
 
-SECTORS_SET = nineSectors
+SECTORS_SET = nINESECTORS
 
 
 class IntersectBasedAnalysisClass:
@@ -35,9 +36,14 @@ class IntersectBasedAnalysisClass:
     stocks4Analysis = []
     erroneousStocks = []
     out_file = 0
-    sectors_list = ['IBB', 'IYR', 'IYW', 'ICF', 'IYH', 'IYT', 'ITB', 'REM', 'IYF', 'IYE', 'IYJ',
-                    'IHE', 'IHI', 'IDU', 'IYM', 'IYG', 'IAT', 'IYZ', 'SOXX', 'IYK', 'IHF', 'IYC',
-                    'IEO', 'IEZ', 'ITA', 'REZ', 'IAI', 'IAK', 'FTY']
+    if SECTORS_SET == iSHARES_SECTORS:
+        sectors_list = ['IBB', 'IYR', 'IYW', 'ICF', 'IYH', 'IYT', 'ITB', 'REM', 'IYF', 'IYE', 'IYJ',
+                        'IHE', 'IHI', 'IDU', 'IYM', 'IYG', 'IAT', 'IYZ', 'SOXX', 'IYK', 'IHF', 'IYC',
+                        'IEO', 'IEZ', 'ITA', 'REZ', 'IAI', 'IAK', 'FTY']
+    elif SECTORS_SET == nINESECTORS:
+        sectors_list = ['XLB', 'XLE', 'XLP', 'XLF', 'XLV',
+                        'XLI', 'XLY', 'XLK', 'XLU']
+
     sectors_to_analyze = []
     sectors_rating = []
 
@@ -129,7 +135,6 @@ class IntersectBasedAnalysisClass:
             # self.out_file.write("Sectors to be analyzed and it rank:\n")
             # for sector in self.sectors_to_analyze:
             #     self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
-                
 
     def checkIfUpdate(self):
         # day = datetime.today().day
@@ -140,7 +145,11 @@ class IntersectBasedAnalysisClass:
     def analyze(self):
         time.sleep(2)
 
-        f = open('SectorHoldings.dat', 'r')
+        if SECTORS_SET == iSHARES_SECTORS:
+            f = open('SectorHoldings.dat', 'r')
+        elif SECTORS_SET == nINESECTORS:
+            f = open('FinvizSectors.dat', 'r')
+
         sectorHoldingsUrls = f.readlines()
 
         # for holding in sectorHoldingsUrls:
@@ -152,20 +161,24 @@ class IntersectBasedAnalysisClass:
             self.out_file.write("Sector: %s, Rank: %f\n" % (self.sectors_list[index], self.sectors_rating[index]))
 
             idx = 0
-            response = urllib2.urlopen(holding)
-            cr = csv.reader(response)
-            # cr = pd.read_csv(response)
-            data = []
-            copyfromhere = False
+            if SECTORS_SET == iSHARES_SECTORS:
+                response = urllib.urlopen(holding)
+                cr = csv.reader(response)
+                # cr = pd.read_csv(response)
+                data = []
+                copyfromhere = False
 
-            for row in cr:
-                if 'Ticker' in row:
-                    copyfromhere = True
-                if copyfromhere:
-                    data.append(row)
-            df = DataFrame(data[1:-2], columns=data[0])
+                for row in cr:
+                    if 'Ticker' in row:
+                        copyfromhere = True
+                    if copyfromhere:
+                        data.append(row)
+                df = DataFrame(data[1:-2], columns=data[0])
 
-            self.stocksList = df['Ticker']
+                self.stocksList = df['Ticker']
+            elif SECTORS_SET == nINESECTORS:
+                self.stocksList = getFinviz(holding)
+
             self.numStocksInList = len(self.stocksList)
             print("Stocks list: ", self.stocksList, "\n")
 
@@ -224,9 +237,9 @@ class IntersectBasedAnalysisClass:
                                  (self.stock.m_data['symbol']['analysis']['m']['moveType'] == -1)),         # condition 3
                                 self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal'],    # condition 4
                                 ((self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] and
-                                 self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) or
+                                  self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) or
                                  (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'] and
-                                 self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1)),          # condition 5
+                                  self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1)),          # condition 5
                                 (self.stock.m_data['symbol']['analysis']['d']['riskRatio'] > 0.5),          # condition 6
                                 ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
                                  (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1)),          # condition 7
@@ -239,24 +252,24 @@ class IntersectBasedAnalysisClass:
                     self.out_file.write("Condition 0: IntersectInd=%d\n" % self.stock.m_data['symbol']['analysis']['d']['intersectInd'])
                     self.out_file.write("Condition 1: RS=%f\n" % self.stock.m_data['SPY']['analysis']['d']['rs'])
                     self.out_file.write("Condition 2/3: d_trendType=%d, w_moveType=%d, m_moveType=%d\n" %
-                                   (self.stock.m_data['symbol']['analysis']['d']['trendType'],
-                                    self.stock.m_data['symbol']['analysis']['w']['moveType'],
-                                    self.stock.m_data['symbol']['analysis']['m']['moveType']))
+                                        (self.stock.m_data['symbol']['analysis']['d']['trendType'],
+                                         self.stock.m_data['symbol']['analysis']['w']['moveType'],
+                                         self.stock.m_data['symbol']['analysis']['m']['moveType']))
                     self.out_file.write("Condition 4: proximity=%d\n" % self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal'])
                     self.out_file.write("Condition 5: lastWHigh=%f, lastWLow=%f, trendType=%d\n" %
-                                   (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'],
-                                    self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'],
-                                    self.stock.m_data['symbol']['analysis']['d']['trendType']))
+                                        (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'],
+                                         self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'],
+                                         self.stock.m_data['symbol']['analysis']['d']['trendType']))
                     self.out_file.write("Condition 6: riskR=%f\n" % self.stock.m_data['symbol']['analysis']['d']['riskRatio'])
                     self.out_file.write("Condition 7/8: d_trendType=%d, w_moveType=%d\n" %
-                                   (self.stock.m_data['symbol']['analysis']['d']['trendType'],
-                                    self.stock.m_data['symbol']['analysis']['w']['moveType']))
+                                        (self.stock.m_data['symbol']['analysis']['d']['trendType'],
+                                         self.stock.m_data['symbol']['analysis']['w']['moveType']))
                     self.out_file.write("Condition 9: trendStrength=%f, TREND_STRENGTH_THS=%f\n" % (self.stock.m_data['symbol']['analysis']['d']['trendStrength'],TREND_STRENGTH_THS))
                     self.out_file.write("SPY: d_trendType=%d, d_moveType=%d, w_moveType=%d, m_moveType=%d\n" %
-                                   (self.stock.m_data['SPY']['analysis']['d']['trendType'],
-                                    self.stock.m_data['SPY']['analysis']['d']['moveType'],
-                                    self.stock.m_data['SPY']['analysis']['w']['moveType'],
-                                    self.stock.m_data['SPY']['analysis']['m']['moveType']))
+                                        (self.stock.m_data['SPY']['analysis']['d']['trendType'],
+                                         self.stock.m_data['SPY']['analysis']['d']['moveType'],
+                                         self.stock.m_data['SPY']['analysis']['w']['moveType'],
+                                         self.stock.m_data['SPY']['analysis']['m']['moveType']))
 
                 if EXTENDED_DEBUG:
                     print('Conditions: ', l_conditions)
