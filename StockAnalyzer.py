@@ -59,6 +59,10 @@ class IntersectBasedAnalysisClass:
             self.stock.reversalPointsDetector(i_destDictKey=sector)
             self.stock.trend(i_destDictKey=sector, i_freq='d', i_debug=False)
             self.stock.rs(i_freq='d', i_ref='SPY', i_src=sector)
+            self.stock.ema(i_destDictKey=sector, i_period=34)
+            self.stock.ema(i_destDictKey=sector, i_period=14)
+            # self.stock.ema(i_destDictKey=sector, i_period=200)
+            # self.stock.ema(i_destDictKey=sector, i_period=50)
             if EXTENDED_DEBUG:
                 print('#### End handling ', sector, ' ####')
                 # self.out_file.write("#### End handling %s ####\n" & (sector))
@@ -71,6 +75,10 @@ class IntersectBasedAnalysisClass:
         self.stock.getMovementType(i_destDictKey='SPY')
         self.stock.reversalPointsDetector(i_destDictKey='SPY')
         self.stock.trend(i_destDictKey='SPY', i_freq='d', i_debug=False)
+        self.stock.ema(i_destDictKey='SPY', i_period=34)
+        self.stock.ema(i_destDictKey='SPY', i_period=14)
+        # self.stock.ema(i_destDictKey='SPY', i_period=200)
+        # self.stock.ema(i_destDictKey='SPY', i_period=50)
         if EXTENDED_DEBUG:
             print("#### End handling SPY ####")
             self.out_file.write("#### End handling SPY ####\n")
@@ -79,12 +87,25 @@ class IntersectBasedAnalysisClass:
         idx = 0
         for sector in self.sectors_list:
             rating = 0
+
+            # self.stock.plotlyData(i_destDictKey=sector)
+
             # rate 1
+            # if EXTENDED_DEBUG:
+            #     print("[DEBUG] - rate 1")
+            #     print("SPY trend type: ", self.stock.m_data['SPY']['analysis']['d']['trendType'])
+            #     print(sector," trend type: ", self.stock.m_data['SPY']['analysis']['d']['trendType'])
             if self.stock.m_data['SPY']['analysis']['d']['trendType'] == self.stock.m_data[sector]['analysis']['d']['trendType'] and \
                self.stock.m_data['SPY']['analysis']['d']['trendType'] > 0 and \
                self.stock.m_data[sector]['analysis']['d']['trendType'] > 0:
                 rating = rating + RATE_1_SCORE
+
             # rate 2
+            # if EXTENDED_DEBUG:
+            #     print("[DEBUG] - rate 2")
+            #     print(sector," trend[daily] type: ", self.stock.m_data[sector]['analysis']['d']['trendType'])
+            #     print(sector," move[weekly] type: ", self.stock.m_data[sector]['analysis']['w']['moveType'])
+            #     print(sector," move[weekly] type: ", self.stock.m_data[sector]['analysis']['m']['moveType'])
             if self.stock.m_data[sector]['analysis']['d']['trendType'] == 2:  # up
                 if self.stock.m_data[sector]['analysis']['w']['moveType'] == 2:  # up
                     rating = rating + RATE_2_SCORE * 0.5
@@ -103,11 +124,20 @@ class IntersectBasedAnalysisClass:
                     rating = rating + RATE_2_SCORE * 0.25
                 if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 1:  # down
                     rating = rating + RATE_2_SCORE * 0.125
+
             # rate 3
+            # if EXTENDED_DEBUG:
+            #     print("[DEBUG] - rate 3")
+            #     print(sector," rs[daily]: ", self.stock.m_data[sector]['analysis']['d']['rs'])
             if self.stock.m_data[sector]['analysis']['d']['rs'] >= RS_THS:
                 rating = rating + RATE_3_SCORE
 
             # rate 4
+            # if EXTENDED_DEBUG:
+            #     print("[DEBUG] - rate 4")
+            #     print(sector," trend[daily] type: ", self.stock.m_data[sector]['analysis']['d']['trendType'])
+            #     print(sector," move[daily] type: ", self.stock.m_data[sector]['analysis']['d']['moveType'])
+            #     print(sector," move[weekly] type: ", self.stock.m_data[sector]['analysis']['w']['moveType'])
             if (self.stock.m_data[sector]['analysis']['d']['trendType'] == 2) and \
                (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
                (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
@@ -264,7 +294,7 @@ class IntersectBasedAnalysisClass:
                     self.out_file.write("Condition 7/8: d_trendType=%d, w_moveType=%d\n" %
                                         (self.stock.m_data['symbol']['analysis']['d']['trendType'],
                                          self.stock.m_data['symbol']['analysis']['w']['moveType']))
-                    self.out_file.write("Condition 9: trendStrength=%f, TREND_STRENGTH_THS=%f\n" % (self.stock.m_data['symbol']['analysis']['d']['trendStrength'],TREND_STRENGTH_THS))
+                    self.out_file.write("Condition 9: trendStrength=%f, TREND_STRENGTH_THS=%f\n" % (self.stock.m_data['symbol']['analysis']['d']['trendStrength'], TREND_STRENGTH_THS))
                     self.out_file.write("SPY: d_trendType=%d, d_moveType=%d, w_moveType=%d, m_moveType=%d\n" %
                                         (self.stock.m_data['SPY']['analysis']['d']['trendType'],
                                          self.stock.m_data['SPY']['analysis']['d']['moveType'],

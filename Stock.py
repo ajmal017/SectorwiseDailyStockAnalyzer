@@ -93,7 +93,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -754,7 +758,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -775,7 +783,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -796,7 +808,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -817,7 +833,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -838,7 +858,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -859,7 +883,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -880,7 +908,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -901,7 +933,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -922,7 +958,11 @@ class StockClass:
                                          'imin': [],
                                          'imax': [],
                                          'rs': 0,
-                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
@@ -949,54 +989,106 @@ class StockClass:
         self.generalData['endDate'] = datetime(end.year, end.month, end.day)
         self.generalData['startDate'] = self.generalData['endDate'] - DAILY_MONTH_DATA_BACKOFF
 
-        self.m_data['symbol']['data']['d'] = pd.DataFrame()
-        self.m_data['symbol']['data']['w'] = pd.DataFrame()
-        self.m_data['symbol']['data']['m'] = pd.DataFrame()
+        if name == '':
+            for key in self.m_data.keys():
+                self.m_data[key]['data']['d'] = pd.DataFrame()
+                self.m_data[key]['data']['w'] = pd.DataFrame()
+                self.m_data[key]['data']['m'] = pd.DataFrame()
 
-        self.m_data['symbol']['analysis']['d']['localMins'] = np.empty(shape=0)
-        self.m_data['symbol']['analysis']['d']['localMaxs'] = np.empty(shape=0)
-        self.m_data['symbol']['analysis']['d']['moveType'] = 0
-        self.m_data['symbol']['analysis']['d']['trendType'] = 0
-        self.m_data['symbol']['analysis']['d']['trendStrength'] = 0.0
-        self.m_data['symbol']['analysis']['d']['imin'] = []
-        self.m_data['symbol']['analysis']['d']['imax'] = []
-        self.m_data['symbol']['analysis']['d']['ema34'] = []
-        self.m_data['symbol']['analysis']['d']['ema14'] = []
-        self.m_data['symbol']['analysis']['d']['ema200'] = []
-        self.m_data['symbol']['analysis']['d']['ema50'] = []
-        self.m_data['symbol']['analysis']['d']['rs'] = 0
-        self.m_data['symbol']['analysis']['d']['intersectVec'] = []
-        self.m_data['symbol']['analysis']['d']['intersectInd'] = False
-        self.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] = 0.0
-        self.m_data['symbol']['analysis']['d']['lastWeeklyLow'] = 0.0
-        self.m_data['symbol']['analysis']['d']['proximity2TrendReversal'] = False
-        self.m_data['symbol']['analysis']['d']['riskRatio'] = 0.0
+                self.m_data[key]['analysis']['d']['localMins'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['d']['localMaxs'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['d']['moveType'] = 0
+                self.m_data[key]['analysis']['d']['trendType'] = 0
+                self.m_data[key]['analysis']['d']['trendStrength'] = 0.0
+                self.m_data[key]['analysis']['d']['imin'] = []
+                self.m_data[key]['analysis']['d']['imax'] = []
+                self.m_data[key]['analysis']['d']['ema34'] = []
+                self.m_data[key]['analysis']['d']['ema14'] = []
+                self.m_data[key]['analysis']['d']['ema200'] = []
+                self.m_data[key]['analysis']['d']['ema50'] = []
+                self.m_data[key]['analysis']['d']['rs'] = 0
+                self.m_data[key]['analysis']['d']['intersectVec'] = []
+                self.m_data[key]['analysis']['d']['intersectInd'] = False
+                self.m_data[key]['analysis']['d']['lastWeeklyHigh'] = 0.0
+                self.m_data[key]['analysis']['d']['lastWeeklyLow'] = 0.0
+                self.m_data[key]['analysis']['d']['proximity2TrendReversal'] = False
+                self.m_data[key]['analysis']['d']['riskRatio'] = 0.0
 
-        self.m_data['symbol']['analysis']['w']['localMins'] = np.empty(shape=0)
-        self.m_data['symbol']['analysis']['w']['localMaxs'] = np.empty(shape=0)
-        self.m_data['symbol']['analysis']['w']['moveType'] = 0
-        self.m_data['symbol']['analysis']['w']['trendType'] = 0
-        self.m_data['symbol']['analysis']['w']['imin'] = []
-        self.m_data['symbol']['analysis']['w']['imax'] = []
-        # self.m_data['symbol']['analysis']['d']['ema34'] = []
-        # self.m_data['symbol']['analysis']['d']['ema14'] = []
-        # self.m_data['symbol']['analysis']['d']['ema200'] = []
-        # self.m_data['symbol']['analysis']['d']['ema50'] = []
-        # self.m_data['symbol']['analysis']['d']['rs'] = 0
-        # self.m_data['symbol']['analysis']['d']['intersectVec'] = []
+                self.m_data[key]['analysis']['w']['localMins'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['w']['localMaxs'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['w']['moveType'] = 0
+                self.m_data[key]['analysis']['w']['trendType'] = 0
+                self.m_data[key]['analysis']['w']['imin'] = []
+                self.m_data[key]['analysis']['w']['imax'] = []
+                # self.m_data[key]['analysis']['d']['ema34'] = []
+                # self.m_data[key]['analysis']['d']['ema14'] = []
+                # self.m_data[key]['analysis']['d']['ema200'] = []
+                # self.m_data[key]['analysis']['d']['ema50'] = []
+                # self.m_data[key]['analysis']['d']['rs'] = 0
+                # self.m_data[key]['analysis']['d']['intersectVec'] = []
 
-        self.m_data['symbol']['analysis']['m']['localMins'] = np.empty(shape=0)
-        self.m_data['symbol']['analysis']['m']['localMaxs'] = np.empty(shape=0)
-        self.m_data['symbol']['analysis']['m']['moveType'] = 0
-        self.m_data['symbol']['analysis']['m']['trendType'] = 0
-        self.m_data['symbol']['analysis']['m']['imin'] = []
-        self.m_data['symbol']['analysis']['m']['imax'] = []
-        # self.m_data['symbol']['analysis']['d']['ema34'] = []
-        # self.m_data['symbol']['analysis']['d']['ema14'] = []
-        # self.m_data['symbol']['analysis']['d']['ema200'] = []
-        # self.m_data['symbol']['analysis']['d']['ema50'] = []
-        # self.m_data['symbol']['analysis']['d']['rs'] = 0
-        # self.m_data['symbol']['analysis']['d']['intersectVec'] = []
+                self.m_data[key]['analysis']['m']['localMins'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['m']['localMaxs'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['m']['moveType'] = 0
+                self.m_data[key]['analysis']['m']['trendType'] = 0
+                self.m_data[key]['analysis']['m']['imin'] = []
+                self.m_data[key]['analysis']['m']['imax'] = []
+                # self.m_data[key]['analysis']['d']['ema34'] = []
+                # self.m_data[key]['analysis']['d']['ema14'] = []
+                # self.m_data[key]['analysis']['d']['ema200'] = []
+                # self.m_data[key]['analysis']['d']['ema50'] = []
+                # self.m_data[key]['analysis']['d']['rs'] = 0
+                # self.m_data[key]['analysis']['d']['intersectVec'] = []
+        else:
+            key = 'symbol'
+            self.m_data[key]['data']['d'] = pd.DataFrame()
+            self.m_data[key]['data']['w'] = pd.DataFrame()
+            self.m_data[key]['data']['m'] = pd.DataFrame()
+
+            self.m_data[key]['analysis']['d']['localMins'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['d']['localMaxs'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['d']['moveType'] = 0
+            self.m_data[key]['analysis']['d']['trendType'] = 0
+            self.m_data[key]['analysis']['d']['trendStrength'] = 0.0
+            self.m_data[key]['analysis']['d']['imin'] = []
+            self.m_data[key]['analysis']['d']['imax'] = []
+            self.m_data[key]['analysis']['d']['ema34'] = []
+            self.m_data[key]['analysis']['d']['ema14'] = []
+            self.m_data[key]['analysis']['d']['ema200'] = []
+            self.m_data[key]['analysis']['d']['ema50'] = []
+            self.m_data[key]['analysis']['d']['rs'] = 0
+            self.m_data[key]['analysis']['d']['intersectVec'] = []
+            self.m_data[key]['analysis']['d']['intersectInd'] = False
+            self.m_data[key]['analysis']['d']['lastWeeklyHigh'] = 0.0
+            self.m_data[key]['analysis']['d']['lastWeeklyLow'] = 0.0
+            self.m_data[key]['analysis']['d']['proximity2TrendReversal'] = False
+            self.m_data[key]['analysis']['d']['riskRatio'] = 0.0
+
+            self.m_data[key]['analysis']['w']['localMins'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['w']['localMaxs'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['w']['moveType'] = 0
+            self.m_data[key]['analysis']['w']['trendType'] = 0
+            self.m_data[key]['analysis']['w']['imin'] = []
+            self.m_data[key]['analysis']['w']['imax'] = []
+            # self.m_data[key]['analysis']['d']['ema34'] = []
+            # self.m_data[key]['analysis']['d']['ema14'] = []
+            # self.m_data[key]['analysis']['d']['ema200'] = []
+            # self.m_data[key]['analysis']['d']['ema50'] = []
+            # self.m_data[key]['analysis']['d']['rs'] = 0
+            # self.m_data[key]['analysis']['d']['intersectVec'] = []
+
+            self.m_data[key]['analysis']['m']['localMins'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['m']['localMaxs'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['m']['moveType'] = 0
+            self.m_data[key]['analysis']['m']['trendType'] = 0
+            self.m_data[key]['analysis']['m']['imin'] = []
+            self.m_data[key]['analysis']['m']['imax'] = []
+            # self.m_data[key]['analysis']['d']['ema34'] = []
+            # self.m_data[key]['analysis']['d']['ema14'] = []
+            # self.m_data[key]['analysis']['d']['ema200'] = []
+            # self.m_data[key]['analysis']['d']['ema50'] = []
+            # self.m_data[key]['analysis']['d']['rs'] = 0
+            # self.m_data[key]['analysis']['d']['intersectVec'] = []
 
     # get the historical stock data for daily, weekly and monthly time frequencies
     # The columns of the data consist of the following:
@@ -1018,6 +1110,7 @@ class StockClass:
     def plotlyData(self, i_destDictKey, i_freq='d', i_debug=False, i_out=None):
         l_data = self.m_data[i_destDictKey]['data'][i_freq]
         l_data['Date_tmp'] = l_data['Date'].apply(lambda d: mdates.date2num(d.to_pydatetime()))
+
         # idxLocalMins = self.m_data[i_destDictKey]['analysis'][i_freq]['localMins']
         # idxLocalMaxs = self.m_data[i_destDictKey]['analysis'][i_freq]['localMaxs']
         minIdx = self.m_data[i_destDictKey]['analysis'][i_freq]['imin']
@@ -1034,7 +1127,8 @@ class StockClass:
             trend = 'None'
         # Update the fig - all options here: https://plot.ly/python/reference/#Layout
         fig['layout'].update({
-            'title': self.generalData['name'] + ' [' + trend + ']',
+            # 'title': self.generalData['name'] + ' [' + trend + ']',
+            'title': i_destDictKey + ' [' + trend + ']',
             'yaxis': {'title': 'Stock Price [$]'},
             'xaxis': {'title': 'Date'},
             # 'shapes': [{
@@ -1052,6 +1146,9 @@ class StockClass:
 
         # plotly.offline.iplot(fig, filename='finance/aapl-recession-ohlc', validate=False)
 
+        if len(self.m_data[i_destDictKey]['analysis'][i_freq]['ema34']) > len(l_data['Date']):
+            idx = len(self.m_data[i_destDictKey]['analysis'][i_freq]['ema34']) - len(l_data['Date']) + 1
+
         add_mins = Scatter(
             x=l_data['Date'][minIdx],
             y=l_data['Low'][minIdx],
@@ -1064,27 +1161,27 @@ class StockClass:
             mode='markers')
         add_ema34 = Scatter(
             x=l_data['Date'],
-            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema34'],
+            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema34'][idx:],
             name='EMA-34',
             mode='line')
         add_ema14 = Scatter(
             x=l_data['Date'],
-            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema14'],
+            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema14'][idx:],
             name='EMA-14',
             mode='line')
         add_ema200 = Scatter(
             x=l_data['Date'],
-            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema200'],
+            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema200'][idx:],
             name='EMA-200',
             mode='line')
         add_ema50 = Scatter(
             x=l_data['Date'],
-            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema50'],
+            y=self.m_data[i_destDictKey]['analysis'][i_freq]['ema50'][idx:],
             name='EMA-50',
             mode='line')
 
         fig['data'].extend([add_mins, add_maxs, add_ema34, add_ema14, add_ema200, add_ema50])
-        plotly.offline.plot(fig)
+        plotly.offline.plot(fig, filename=str(i_destDictKey) + '.html')
 
     def debugPlotlyData(self, i_destDictKey, i_freq='d', i_debug=False, i_debugTxt='', i_out=None):
         l_data = self.m_data[i_destDictKey]['data'][i_freq]
@@ -1457,8 +1554,15 @@ class StockClass:
             sectorDataClose = self.m_data[i_ref]['data'][i_freq]['Close'][:i_dataWidth]
 
         indexDiff = min(floor(len(sectorDataClose) / 4), floor(len(symbolDataClose) / 4))
-        indicesSectorData = [range(len(sectorDataClose) - int(indexDiff), len(sectorDataClose))]
-        indicesSymbolData = [range(len(symbolDataClose) - int(indexDiff), len(symbolDataClose))]
+        # indicesSectorData = [range(len(sectorDataClose) - int(indexDiff), len(sectorDataClose))]
+        indicesSectorData = []
+        for idx in range(len(sectorDataClose) - int(indexDiff), len(sectorDataClose)):
+            indicesSectorData.append(idx)
+
+        # indicesSymbolData = [range(len(symbolDataClose) - int(indexDiff), len(symbolDataClose))]
+        indicesSymbolData = []
+        for idx in range(len(symbolDataClose) - int(indexDiff), len(symbolDataClose)):
+            indicesSymbolData.append(idx)
 
         u1 = sum(sectorDataClose[indicesSectorData]) / indexDiff
         u2 = sum(symbolDataClose[indicesSymbolData]) / indexDiff
@@ -1470,7 +1574,7 @@ class StockClass:
         s2 = sqrt(v2)
 
         correlation = cov / (s1 * s2)
-        self.m_data[i_ref]['analysis'][i_freq]['rs'] = correlation
+        self.m_data[i_src]['analysis'][i_freq]['rs'] = correlation
 
     # def ema(self,window):
     def ema(self, i_destDictKey, i_period, i_freq='d', i_type='simple', i_dataWidth=0, i_debug=False, i_out=None):
