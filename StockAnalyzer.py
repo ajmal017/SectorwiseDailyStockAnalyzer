@@ -162,9 +162,9 @@ class IntersectBasedAnalysisClass:
         if EXTENDED_DEBUG:
             print("Sectors to be analyzed: ", self.sectors_to_analyze)
             print("Sectors ranking: ", self.sectors_rating)
-            # self.out_file.write("Sectors to be analyzed and it rank:\n")
-            # for sector in self.sectors_to_analyze:
-            #     self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
+            self.out_file.write("Sectors to be analyzed and it rank:\n")
+            for sector in self.sectors_to_analyze:
+                self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
 
     def checkIfUpdate(self):
         # day = datetime.today().day
