@@ -1,6 +1,15 @@
-from urllib.request import urlopen
+import requests
+from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
+from urllib.error import  URLError
+import time
+import http.client
+from requests import get  # to make GET request
 
+def download(url):
+    # open in binary mode
+     response = get(url)
+     return response.content
 
 def getFinviz(base_url):
 
@@ -10,11 +19,7 @@ def getFinviz(base_url):
     url = base_url
     info = []
 
-    try:
-        html = urlopen(url).read()
-        done = False
-    except:
-        done = True
+    html = download(url)
 
     while (not done):
         soup = BeautifulSoup(html, "html.parser")
@@ -28,16 +33,20 @@ def getFinviz(base_url):
             if "quote.ashx?t=" in element:
                 new_info.append(element[element.find("?t=") + 3:element.find("&ty")])
 
+        # print("new_info: ", new_info)
+        # print("info: ", new_info)
+        # time.sleep(1)
         if info and new_info[-1] == info[-1]:
             break
         for each_element in new_info:
             info.append(each_element)
 
-        url = base_url + "&r=" + str(k * initIttr + 1)
+        url = ''.join((base_url.rstrip('\n'),"&r=",str(k * initIttr + 1)))
+        # print("URL: ", url)
         k = k + 1
-        try:
-            html = urlopen(url).read()
-        except:
-            done = True
+
+        # print("Still working on GET: ", k)
+        html = []
+        html = download(url)
 
     return set(info)

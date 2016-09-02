@@ -1,21 +1,23 @@
 from Stock import *
 from Utils import *
 import time
-# import gc
+import json
 # import random
 # import os
 import csv
 import urllib
 from pandas import DataFrame
 from finviz import getFinviz
+from terminaltables import AsciiTable
+
 
 ANALYSIS_TYPE = 'short'  # 'long'
 RS_THS = 0.7
 TREND_STRENGTH_THS = 0.5  # 0.0 for debug only
 ANALYSIS_THS = 0  # 0 used for debug only
 now = datetime.now()
-EXTENDED_DEBUG = True
-DEBUG_CONDITIONS = True
+EXTENDED_DEBUG = False
+DEBUG_CONDITIONS = False
 
 RATE_1_SCORE = 20
 RATE_2_SCORE = 30
@@ -26,7 +28,7 @@ iSHARES_SECTORS = "iShares"
 nINESECTORS = "nineSectors"
 
 SECTORS_SET = nINESECTORS
-
+table_data = [['Sector', 'Raking']]
 
 class IntersectBasedAnalysisClass:
 
@@ -43,6 +45,8 @@ class IntersectBasedAnalysisClass:
     elif SECTORS_SET == nINESECTORS:
         sectors_list = ['XLB', 'XLE', 'XLP', 'XLF', 'XLV',
                         'XLI', 'XLY', 'XLK', 'XLU']
+    # 4DEBUG
+    # sectors_list = ['XLP']
 
     sectors_to_analyze = []
     sectors_rating = []
@@ -157,7 +161,14 @@ class IntersectBasedAnalysisClass:
             self.sectors_rating.append(rating)
             if rating > ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
+                table_data.append([sector,str(rating) + '/' + str(RATE_1_SCORE+RATE_2_SCORE+RATE_3_SCORE+RATE_4_SCORE)])
+
             idx = idx + 1
+
+
+        rankingTable = AsciiTable(table_data)
+        rankingTable.inner_heading_row_border = True
+        print(rankingTable.table)
 
         if EXTENDED_DEBUG:
             print("Sectors to be analyzed: ", self.sectors_to_analyze)
@@ -229,9 +240,9 @@ class IntersectBasedAnalysisClass:
                 except:
                     self.erroneousStocks.append(symbolName)
                     save_obj(self.erroneousStocks, 'erroneousStocks_' + ANALYSIS_TYPE)
-                    if EXTENDED_DEBUG:
-                        print('!!!! GetData ERROR !!!!')
-                        self.out_file.write('!!!! GetData ERROR !!!!\n')
+                    # if EXTENDED_DEBUG:
+                    print('!!!! GetData ERROR !!!!')
+                    self.out_file.write('!!!! GetData ERROR !!!!\n')
                     continue
 
                 # self.stock.findLocalMinMax(i_destDictKey='symbol')

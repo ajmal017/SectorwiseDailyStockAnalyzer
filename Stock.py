@@ -1107,6 +1107,12 @@ class StockClass:
     def getDataDate(self, i_freq='d', i_destDictKey='SPY'):
         return self.m_data[i_destDictKey]['data'][i_freq]['Date'][len(self.m_data[i_destDictKey]['data'][i_freq]['Date']) - 1]
 
+    # def plotlyGraphs(self, i_type=None, i_freq='d', i_debug=False, i_out=None, i_tickerList=None):
+
+    #     if i_type == "SECTOR":
+    #         for ticker in i_tickerList:
+    #             trace +
+
     def plotlyData(self, i_destDictKey, i_freq='d', i_debug=False, i_out=None):
         l_data = self.m_data[i_destDictKey]['data'][i_freq]
         l_data['Date_tmp'] = l_data['Date'].apply(lambda d: mdates.date2num(d.to_pydatetime()))
@@ -1355,7 +1361,7 @@ class StockClass:
                (l_dataClose[kPlus2] > l_dataLow[kPlus1]):
                 newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(newK)
                     if i_debug:
                         print("3-4-5", k, searchMinima, searchMaxima)
                         i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1380,7 +1386,7 @@ class StockClass:
                (l_dataClose[k] > l_dataHigh[kMinus1]):
                 newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(newK)
                     if i_debug:
                         print("Outside-Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Outside-Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1395,7 +1401,7 @@ class StockClass:
                (isHammer and (l_dataClose[kPlus1] > l_dataHigh[k])):
                 newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(newK)
                     if i_debug:
                         print("#4", k, searchMinima, searchMaxima)
                         i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1413,7 +1419,7 @@ class StockClass:
                (isStar and (l_dataClose[kPlus1] > l_dataHigh[k])):
                 newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(newK)
                     if i_debug:
                         print("#5", k, searchMinima, searchMaxima)
                         i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1430,7 +1436,7 @@ class StockClass:
                (marubozuWhite and (l_dataClose[kPlus1] > l_dataHigh[k])):
                 newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(newK)
                     if i_debug:
                         print("#6", k, searchMinima, searchMaxima)
                         i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1454,7 +1460,7 @@ class StockClass:
                (l_dataClose[kPlus2] < l_dataHigh[kPlus1]):
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
                     if i_debug:
                         print("3-4-5", k, searchMinima, searchMaxima)
                         i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1467,7 +1473,7 @@ class StockClass:
                (l_dataClose[kPlus1] < l_dataLow[k]):
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
                     if i_debug:
                         print("Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1479,7 +1485,7 @@ class StockClass:
                (l_dataClose[k] < l_dataLow[kMinus1]):
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
                     if i_debug:
                         print("Outside-Key-Reversal", k, searchMinima, searchMaxima)
                         i_out.write("Outside-Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1495,7 +1501,7 @@ class StockClass:
                (isInvertedHammer and (l_dataClose[kPlus1] < l_dataLow[k])):
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
                     if i_debug:
                         print("#4", k, searchMinima, searchMaxima)
                         i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1513,7 +1519,7 @@ class StockClass:
                (isStar and (l_dataClose[kPlus1] < l_dataLow[k])):
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
                     if i_debug:
                         print("#5", k, searchMinima, searchMaxima)
                         i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1530,7 +1536,7 @@ class StockClass:
                (marubozuBlack and (l_dataClose[kPlus1] < l_dataLow[k])):
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
-                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
                     if i_debug:
                         print("#6", k, searchMinima, searchMaxima)
                         i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1542,8 +1548,8 @@ class StockClass:
         if i_debug:
             print("[reversalPointsDetector] - imin: ", self.m_data[i_destDictKey]['analysis'][i_freq]['imin'])
             print("[reversalPointsDetector] - imax: ", self.m_data[i_destDictKey]['analysis'][i_freq]['imax'])
-            i_out.write("[reversalPointsDetector] - imin:\n".join(self.m_data[i_destDictKey]['analysis'][i_freq]['imin']))
-            i_out.write("[reversalPointsDetector] - imax:\n".join(self.m_data[i_destDictKey]['analysis'][i_freq]['imax']))
+            # i_out.write("[reversalPointsDetector] - imin:\n".join(self.m_data[i_destDictKey]['analysis'][i_freq]['imin']))
+            # i_out.write("[reversalPointsDetector] - imax:\n".join(self.m_data[i_destDictKey]['analysis'][i_freq]['imax']))
 
     def rs(self, i_freq='d', i_dataWidth=0, i_ref='SPY', i_src='symbol'):
         if (i_dataWidth == 0):
@@ -1709,7 +1715,8 @@ class StockClass:
             else:
                 try:
                     newK = l_dataLow[maxIndex + 1:i_k + 1].argmin()
-                    newK = maxIndex + newK
+                    # newK = maxIndex + newK
+                    # print("newK: ", newK)
                 except:
                     newK = i_k
                 # if not (type(newK) is np.int64):
@@ -1735,7 +1742,7 @@ class StockClass:
             else:
                 try:
                     newK = l_dataHigh[maxIndex + 1:i_k + 1].argmax()
-                    newK = maxIndex + newK
+                    # newK = maxIndex + newK
                 except:
                     newK = i_k
                 # if not (type(newK) is np.int64):
