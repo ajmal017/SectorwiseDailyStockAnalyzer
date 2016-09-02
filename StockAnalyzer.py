@@ -29,13 +29,14 @@ nINESECTORS = "nineSectors"
 
 SECTORS_SET = nINESECTORS
 table_data = [['Sector', 'Raking']]
+cond = 1
 
 class IntersectBasedAnalysisClass:
 
     stocksList = []
     numStocksInList = 0
     stock = StockClass()
-    stocks4Analysis = []
+    stocks4Analysis = [['Ticker','Condition']]
     erroneousStocks = []
     out_file = 0
     if SECTORS_SET == iSHARES_SECTORS:
@@ -329,7 +330,7 @@ class IntersectBasedAnalysisClass:
                 if (l_conditions[7] or l_conditions[8]) and \
                    l_conditions[6] and l_conditions[4]:
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 1][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                             l_conditions[0],
@@ -344,10 +345,12 @@ class IntersectBasedAnalysisClass:
                                                                                             l_conditions[9],
                                                                                             sum(l_conditions),
                                                                                             len(l_conditions)))
+                else:
+                    cond +=1
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]):
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 2][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                              l_conditions[0],
@@ -362,11 +365,13 @@ class IntersectBasedAnalysisClass:
                                                                                              l_conditions[9],
                                                                                              sum(l_conditions),
                                                                                              len(l_conditions)))
+                else:
+                    cond += 1
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]) and \
                    l_conditions[4]:
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 3][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                               l_conditions[0],
@@ -381,12 +386,14 @@ class IntersectBasedAnalysisClass:
                                                                                               l_conditions[9],
                                                                                               sum(l_conditions),
                                                                                               len(l_conditions)))
+                else:
+                    cond += 1
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]) and \
                    l_conditions[4] and \
                    l_conditions[5]:
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 4][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                l_conditions[0],
@@ -401,12 +408,14 @@ class IntersectBasedAnalysisClass:
                                                                                                l_conditions[9],
                                                                                                sum(l_conditions),
                                                                                                len(l_conditions)))
+                else:
+                    cond += 1
                 if l_conditions[0] and l_conditions[1] and \
                    (l_conditions[2] or l_conditions[3]) and \
                    l_conditions[4] and \
                    l_conditions[5] and l_conditions[6]:
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 5][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                                 l_conditions[0],
@@ -421,10 +430,12 @@ class IntersectBasedAnalysisClass:
                                                                                                 l_conditions[9],
                                                                                                 sum(l_conditions),
                                                                                                 len(l_conditions)))
+                else:
+                    cond += 1
                 if (l_conditions[7] or l_conditions[8]) and \
                     l_conditions[6] and l_conditions[4]:
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 6][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                              l_conditions[0],
@@ -439,10 +450,12 @@ class IntersectBasedAnalysisClass:
                                                                                              l_conditions[9],
                                                                                              sum(l_conditions),
                                                                                              len(l_conditions)))
+                else:
+                    cond += 1
                 if (l_conditions[7] or l_conditions[8]) and \
                     l_conditions[4]:
                     # save_obj(self.stock, symbolName)
-                    self.stocks4Analysis.append(symbolName)
+                    self.stocks4Analysis.append([symbolName,str(cond)])
                     save_obj(self.stocks4Analysis, 'stocks4Analysis_'+ANALYSIS_TYPE)
                     self.out_file.write("[COND 7][%s] Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (symbolName,
                                                                                              l_conditions[0],
@@ -457,6 +470,12 @@ class IntersectBasedAnalysisClass:
                                                                                              l_conditions[9],
                                                                                              sum(l_conditions),
                                                                                              len(l_conditions)))
+                else:
+                    cond += 1
+
+        stocksRankingTable = AsciiTable(self.stocks4Analysis)
+        stocksRankingTable.inner_heading_row_border = True
+        print(stocksRankingTable.table)
 
                 if EXTENDED_DEBUG:
                     print('#### End handling [', symbolName, '] ####')
