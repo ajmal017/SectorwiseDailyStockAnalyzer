@@ -29,7 +29,8 @@ nINESECTORS = "nineSectors"
 
 SECTORS_SET = nINESECTORS
 table_data = [['Sector', 'Raking']]
-sectorsPassingCond = [['Ticker','Sector','Condition', 'Intersect', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']]
+sectorsPassingCond = [['Ticker','Sector','Condition', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']]
+errorStocks = [['Ticker','Sector']]
 cond = 1
 
 class IntersectBasedAnalysisClass:
@@ -188,6 +189,7 @@ class IntersectBasedAnalysisClass:
     def analyze(self):
         global cond
         global sectorsPassingCond
+        global errorStocks
 
         time.sleep(2)
 
@@ -246,6 +248,7 @@ class IntersectBasedAnalysisClass:
                 except:
                     self.erroneousStocks.append(symbolName)
                     save_obj(self.erroneousStocks, 'erroneousStocks_' + ANALYSIS_TYPE)
+                    errorStocks.append([symbolName, self.sectors_list[index]])
                     # if EXTENDED_DEBUG:
                     print('!!!! GetData ERROR !!!!')
                     self.out_file.write('!!!! GetData ERROR !!!!\n')
@@ -527,6 +530,10 @@ class IntersectBasedAnalysisClass:
         stocksRankingTable = AsciiTable(sectorsPassingCond)
         stocksRankingTable.inner_heading_row_border = True
         print(stocksRankingTable.table)
+
+        errorStocksTable = AsciiTable(errorStocks)
+        errorStocksTable.inner_heading_row_border = True
+        print(errorStocksTable.table)
 
     def restoreSymbol(self, i_symbol):
         self.stocks4Analysis = load_obj(i_symbol)
