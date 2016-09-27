@@ -277,25 +277,25 @@ class IntersectBasedAnalysisClass:
                 # stock.plotData(i_destDictKey='symbol', i_debug=True)
                 # stock.plotlyData(i_destDictKey='symbol')
 
-                l_conditions = [self.stock.m_data['symbol']['analysis']['d']['intersectInd'],               # condition 0
-                                self.stock.m_data['SPY']['analysis']['d']['rs'] >= RS_THS,               # condition 1
-                                ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
+                l_conditions = [int(self.stock.m_data['symbol']['analysis']['d']['intersectInd']),               # condition 0
+                                int(self.stock.m_data['SPY']['analysis']['d']['rs'] >= RS_THS),               # condition 1
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
                                  (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1) and
-                                 (self.stock.m_data['symbol']['analysis']['m']['moveType'] == 1)),          # condition 2
-                                ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
+                                 (self.stock.m_data['symbol']['analysis']['m']['moveType'] == 1))),          # condition 2
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
                                  (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1) and
-                                 (self.stock.m_data['symbol']['analysis']['m']['moveType'] == -1)),         # condition 3
-                                self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal'],    # condition 4
-                                ((self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] and
+                                 (self.stock.m_data['symbol']['analysis']['m']['moveType'] == -1))),         # condition 3
+                                int(self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal']),    # condition 4
+                                int(((self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] and
                                   self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) or
                                  (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'] and
-                                  self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1)),          # condition 5
-                                (self.stock.m_data['symbol']['analysis']['d']['riskRatio'] > 0.5),          # condition 6
-                                ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
-                                 (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1)),          # condition 7
-                                ((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
-                                 (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1)),          # condition 8
-                                self.stock.m_data['symbol']['analysis']['d']['trendStrength'] > TREND_STRENGTH_THS  # condition 9
+                                  self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1))),          # condition 5
+                                int((self.stock.m_data['symbol']['analysis']['d']['riskRatio'] > 0.5)),          # condition 6
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
+                                 (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1))),          # condition 7
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
+                                 (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1))),          # condition 8
+                                int(self.stock.m_data['symbol']['analysis']['d']['trendStrength'] > TREND_STRENGTH_THS)  # condition 9
                                 ]
 
                 if DEBUG_CONDITIONS:

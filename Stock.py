@@ -60,6 +60,8 @@ class StockClass:
                                             'trendStrength': 0,
                                             'imin': [],
                                             'imax': [],
+                                            'imin_p': [],
+                                            'imax_p': [],
                                             'ema34': [],
                                             'ema14': [],
                                             'ema200': [],
@@ -76,13 +78,17 @@ class StockClass:
                                             'moveType': 0,
                                             'imin': [],
                                             'imax': [],
+                                            'imin_p': [],
+                                            'imax_p': [],
                                             'ema34': [],
                                             'ema14': []},
                                       'm': {'localMins': np.empty(shape=0),
                                             'localMaxs': np.empty(shape=0),
                                             'moveType': 0,
                                             'imin': [],
-                                            'imax': []}}},
+                                            'imax': [],
+                                            'imin_p': [],
+                                            'imax_': []}}},
 
               'SPY': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -92,6 +98,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -103,6 +111,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
@@ -125,12 +135,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYR': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -140,6 +154,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -147,12 +163,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYW': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -162,6 +182,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -169,12 +191,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'ICF': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -184,6 +210,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -191,12 +219,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYH': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -206,6 +238,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -213,12 +247,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYT': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -228,6 +266,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -235,12 +275,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'ITB': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -250,6 +294,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -257,12 +303,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'REM': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -272,6 +322,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -279,12 +331,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYF': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -294,6 +350,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -301,12 +359,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYE': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -316,6 +378,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -323,12 +387,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYJ': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -338,6 +406,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -345,12 +415,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IHE': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -360,6 +434,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -367,12 +443,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IHI': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -382,6 +462,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -389,12 +471,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IDU': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -404,6 +490,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -411,12 +499,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYM': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -426,6 +518,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -433,12 +527,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYG': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -448,6 +546,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -455,12 +555,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IAT': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -470,6 +574,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -477,12 +583,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYZ': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -492,6 +602,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -499,12 +611,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'SOXX': {'data': {'d': pd.DataFrame(),
                                 'w': pd.DataFrame(),
@@ -514,6 +630,8 @@ class StockClass:
                                           'moveType': 0,
                                           'imin': [],
                                           'imax': [],
+                                          'imin_p': [],
+                                         'imax_p': [],
                                           'rs': 0,
                                           'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                     'w': {'localMins': np.empty(shape=0),
@@ -521,12 +639,16 @@ class StockClass:
                                           'moveType': 0,
                                           'imin': [],
                                           'imax': [],
+                                          'imin_p': [],
+                                         'imax_p': [],
                                           'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                     'm': {'localMins': np.empty(shape=0),
                                           'localMaxs': np.empty(shape=0),
                                           'moveType': 0,
                                           'imin': [],
-                                          'imax': []}}},
+                                          'imax': [],
+                                          'imin_p': [],
+                                          'imax_p': []}}},
 
               'IYK': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -536,6 +658,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -543,13 +667,17 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IHF': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -559,6 +687,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -566,12 +696,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IYC': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -581,6 +715,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -588,12 +724,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IEO': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -603,6 +743,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -610,12 +752,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IEZ': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -625,6 +771,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -632,12 +780,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'ITA': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -647,6 +799,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -654,12 +808,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'REZ': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -669,6 +827,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -676,12 +836,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IAI': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -691,6 +855,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -698,12 +864,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'IAK': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -713,6 +883,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -720,12 +892,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'FTY': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -735,6 +911,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'w': {'localMins': np.empty(shape=0),
@@ -742,12 +920,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
 
               'XLB': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
@@ -757,6 +939,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -768,12 +952,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLE': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -782,6 +970,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -793,12 +983,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLP': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -807,6 +1001,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -818,12 +1014,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLF': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -832,6 +1032,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -843,12 +1045,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLV': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -857,6 +1063,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -868,12 +1076,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLI': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -882,6 +1094,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -893,12 +1107,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLY': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -907,6 +1125,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -918,12 +1138,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLK': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -932,6 +1156,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -943,12 +1169,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}},
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
               'XLU': {'data': {'d': pd.DataFrame(),
                                'w': pd.DataFrame(),
                                'm': pd.DataFrame()},
@@ -957,6 +1187,8 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'rs': 0,
                                          'trendType': 0,
                                          'ema34': [],
@@ -968,12 +1200,16 @@ class StockClass:
                                          'moveType': 0,
                                          'imin': [],
                                          'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
                                    'm': {'localMins': np.empty(shape=0),
                                          'localMaxs': np.empty(shape=0),
                                          'moveType': 0,
                                          'imin': [],
-                                         'imax': []}}}
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}}
               }
 
     m_features = pd.DataFrame()
@@ -1002,6 +1238,8 @@ class StockClass:
                 self.m_data[key]['analysis']['d']['trendStrength'] = 0.0
                 self.m_data[key]['analysis']['d']['imin'] = []
                 self.m_data[key]['analysis']['d']['imax'] = []
+                self.m_data[key]['analysis']['d']['imin_p'] = []
+                self.m_data[key]['analysis']['d']['imax_p'] = []
                 self.m_data[key]['analysis']['d']['ema34'] = []
                 self.m_data[key]['analysis']['d']['ema14'] = []
                 self.m_data[key]['analysis']['d']['ema200'] = []
@@ -1020,6 +1258,8 @@ class StockClass:
                 self.m_data[key]['analysis']['w']['trendType'] = 0
                 self.m_data[key]['analysis']['w']['imin'] = []
                 self.m_data[key]['analysis']['w']['imax'] = []
+                self.m_data[key]['analysis']['w']['imin_p'] = []
+                self.m_data[key]['analysis']['w']['imax_p'] = []
                 # self.m_data[key]['analysis']['d']['ema34'] = []
                 # self.m_data[key]['analysis']['d']['ema14'] = []
                 # self.m_data[key]['analysis']['d']['ema200'] = []
@@ -1033,6 +1273,8 @@ class StockClass:
                 self.m_data[key]['analysis']['m']['trendType'] = 0
                 self.m_data[key]['analysis']['m']['imin'] = []
                 self.m_data[key]['analysis']['m']['imax'] = []
+                self.m_data[key]['analysis']['m']['imin_p'] = []
+                self.m_data[key]['analysis']['m']['imax_p'] = []
                 # self.m_data[key]['analysis']['d']['ema34'] = []
                 # self.m_data[key]['analysis']['d']['ema14'] = []
                 # self.m_data[key]['analysis']['d']['ema200'] = []
@@ -1052,6 +1294,8 @@ class StockClass:
             self.m_data[key]['analysis']['d']['trendStrength'] = 0.0
             self.m_data[key]['analysis']['d']['imin'] = []
             self.m_data[key]['analysis']['d']['imax'] = []
+            self.m_data[key]['analysis']['d']['imin_p'] = []
+            self.m_data[key]['analysis']['d']['imax_p'] = []
             self.m_data[key]['analysis']['d']['ema34'] = []
             self.m_data[key]['analysis']['d']['ema14'] = []
             self.m_data[key]['analysis']['d']['ema200'] = []
@@ -1070,6 +1314,8 @@ class StockClass:
             self.m_data[key]['analysis']['w']['trendType'] = 0
             self.m_data[key]['analysis']['w']['imin'] = []
             self.m_data[key]['analysis']['w']['imax'] = []
+            self.m_data[key]['analysis']['w']['imin_p'] = []
+            self.m_data[key]['analysis']['w']['imax_p'] = []
             # self.m_data[key]['analysis']['d']['ema34'] = []
             # self.m_data[key]['analysis']['d']['ema14'] = []
             # self.m_data[key]['analysis']['d']['ema200'] = []
@@ -1083,6 +1329,8 @@ class StockClass:
             self.m_data[key]['analysis']['m']['trendType'] = 0
             self.m_data[key]['analysis']['m']['imin'] = []
             self.m_data[key]['analysis']['m']['imax'] = []
+            self.m_data[key]['analysis']['m']['imin_p'] = []
+            self.m_data[key]['analysis']['m']['imax_p'] = []
             # self.m_data[key]['analysis']['d']['ema34'] = []
             # self.m_data[key]['analysis']['d']['ema14'] = []
             # self.m_data[key]['analysis']['d']['ema200'] = []
@@ -1346,15 +1594,6 @@ class StockClass:
 
             # Analyse min reversals
             # #1: 3-4-5
-            # if searchMinima and \
-            #    (l_data['Low'][kPlus1] > l_data['Low'][k]) and (l_data['High'][kPlus1] > l_data['High'][k]) and \
-            #    (l_data['Low'][kPlus2] > l_data['Low'][kPlus1]) and (l_data['High'][kPlus2] > l_data['High'][kPlus1]) and \
-            #    (l_data['Close'][kPlus2] > l_data['Low'][kPlus1]):
-            #     newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
-            #     if (newK != -1):
-            #         self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(k)
-            #     k = k + 1 + innerCandleLen
-            #     continue
             if searchMinima and \
                (l_dataHigh[kPlus1] > l_dataHigh[k]) and \
                (l_dataHigh[kPlus2] > l_dataHigh[kPlus1]) and \
@@ -1367,6 +1606,17 @@ class StockClass:
                         i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            if searchMinima and \
+               (l_dataHigh[kPlus1] > l_dataHigh[k]):
+                newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin_p'].append(newK)
+                    if i_debug:
+                        print("3-4-5", k, searchMinima, searchMaxima)
+                        i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+
             # #2: Key-Reversal
             if searchMinima and \
                (l_dataOpen[k] < l_dataClose[kMinus1]) and \
@@ -1380,6 +1630,18 @@ class StockClass:
                         i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            if searchMinima and \
+               (l_dataOpen[k] < l_dataClose[kMinus1]) and \
+               (l_dataClose[k] > l_dataClose[kMinus1]):
+                newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin_p'].append(k)
+                    if i_debug:
+                        print("Key-Reversal", k, searchMinima, searchMaxima)
+                        i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+
             # #3: Outside-Key-Reversal
             if searchMinima and \
                (l_dataOpen[k] < l_dataLow[kMinus1]) and \
@@ -1392,6 +1654,7 @@ class StockClass:
                         i_out.write("Outside-Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+
             # #4:
             candleSize = l_dataHigh[k] - l_dataLow[k]
             isHammer = (l_dataOpen[k] > (l_dataHigh[k] - candleSize / 3)) and \
@@ -1402,6 +1665,21 @@ class StockClass:
                 newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imin'].append(newK)
+                    if i_debug:
+                        print("#4", k, searchMinima, searchMaxima)
+                        i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+
+            candleSize = l_dataHigh[k] - l_dataLow[k]
+            isHammer = (l_dataOpen[k] > (l_dataHigh[k] - candleSize / 3)) and \
+                       (l_dataClose[k] > (l_dataHigh[k] - candleSize / 3))
+
+            if searchMinima and \
+               (isHammer):
+                newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin_p'].append(newK)
                     if i_debug:
                         print("#4", k, searchMinima, searchMaxima)
                         i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1425,6 +1703,23 @@ class StockClass:
                         i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            # #5:
+            candleSize = l_dataHigh[k] - l_dataLow[k]
+            isStar = (l_dataOpen[k] > (l_dataLow[k] + candleSize / 3)) and \
+                     (l_dataOpen[k] < (l_dataHigh[k] - candleSize / 3)) and \
+                     (l_dataClose[k] > (l_dataLow[k] + candleSize / 3)) and \
+                     (l_dataClose[k] < (l_dataHigh[k] - candleSize / 3))
+
+            if searchMinima and \
+               (isStar):
+                newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin_p'].append(newK)
+                    if i_debug:
+                        print("#5", k, searchMinima, searchMaxima)
+                        i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
 
             # #6:
             candleSize = l_dataHigh[k] - l_dataLow[k]
@@ -1442,18 +1737,25 @@ class StockClass:
                         i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            # #6:
+            candleSize = l_dataHigh[k] - l_dataLow[k]
+            marubozuSize = l_dataClose[k] - l_dataOpen[k]
+            marubozuWhite = (marubozuSize > 0) and  \
+                            (marubozuSize / candleSize >= 0.9)
+
+            if searchMinima and \
+               (marubozuWhite):
+                newK = self.GetMinimaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imin_p'].append(newK)
+                    if i_debug:
+                        print("#6", k, searchMinima, searchMaxima)
+                        i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
 
             # Analyse max reversals
             # #1: 3-4-5
-            # if searchMaxima and \
-            #    (l_data['Low'][kPlus1] < l_data['Low'][k]) and (l_data['High'][kPlus1] < l_data['High'][k]) and \
-            #    (l_data['Low'][kPlus2] < l_data['Low'][kPlus1]) and (l_data['High'][kPlus2] < l_data['High'][kPlus1]) and \
-            #    (l_data['Close'][kPlus2] < l_data['High'][kPlus1]):
-            #     newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
-            #     if (newK != -1):
-            #         self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(k)
-            #     k = k + 1 + innerCandleLen
-            #     continue
             if searchMaxima and \
                (l_dataLow[kPlus1] < l_dataLow[k]) and \
                (l_dataLow[kPlus2] < l_dataLow[kPlus1]) and \
@@ -1466,6 +1768,17 @@ class StockClass:
                         i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            if searchMaxima and \
+               (l_dataLow[kPlus1] < l_dataLow[k]):
+                newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax_p'].append(newK)
+                    if i_debug:
+                        print("3-4-5", k, searchMinima, searchMaxima)
+                        i_out.write("3-4-5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+
             # #2: Key-Reversal
             if searchMaxima and \
                (l_dataOpen[k] > l_dataClose[kMinus1]) and \
@@ -1479,6 +1792,18 @@ class StockClass:
                         i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            if searchMaxima and \
+               (l_dataOpen[k] > l_dataClose[kMinus1]) and \
+               (l_dataClose[k] < l_dataClose[kMinus1]):
+                newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax_p'].append(newK)
+                    if i_debug:
+                        print("Key-Reversal", k, searchMinima, searchMaxima)
+                        i_out.write("Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+
             # #3: Outside-Key-Reversal
             if searchMaxima and \
                (l_dataOpen[k] > l_dataHigh[kMinus1]) and \
@@ -1491,6 +1816,7 @@ class StockClass:
                         i_out.write("Outside-Key-Reversal -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+
             # #4:
             candleSize = l_dataHigh[k] - l_dataLow[k]
             bodySize = abs(l_dataOpen[k] - l_dataClose[k])
@@ -1502,6 +1828,21 @@ class StockClass:
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
+                    if i_debug:
+                        print("#4", k, searchMinima, searchMaxima)
+                        i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+            candleSize = l_dataHigh[k] - l_dataLow[k]
+            bodySize = abs(l_dataOpen[k] - l_dataClose[k])
+            bottomShadow = min(l_dataOpen[k], l_dataClose[k]) - l_dataLow[k]
+            isInvertedHammer = (bodySize < candleSize / 3) and (bottomShadow < bodySize / 4)
+
+            if searchMaxima and \
+               (isInvertedHammer):
+                newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax_p'].append(newK)
                     if i_debug:
                         print("#4", k, searchMinima, searchMaxima)
                         i_out.write("#4 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
@@ -1525,6 +1866,22 @@ class StockClass:
                         i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
                 k = k + 1 + innerCandleLen
                 continue
+            candleSize = l_dataHigh[k] - l_dataLow[k]
+            isStar = (l_dataOpen[k] > (l_dataLow[k] + candleSize / 3)) and \
+                     (l_dataOpen[k] < (l_dataHigh[k] - candleSize / 3)) and \
+                     (l_dataClose[k] > (l_dataLow[k] + candleSize / 3)) and \
+                     (l_dataClose[k] < (l_dataHigh[k] - candleSize / 3))
+
+            if searchMaxima and \
+               (isStar):
+                newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax_p'].append(newK)
+                    if i_debug:
+                        print("#5", k, searchMinima, searchMaxima)
+                        i_out.write("#5 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
 
             # #6:
             candleSize = l_dataHigh[k] - l_dataLow[k]
@@ -1537,6 +1894,16 @@ class StockClass:
                 newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
                 if (newK != -1):
                     self.m_data[i_destDictKey]['analysis'][i_freq]['imax'].append(newK)
+                    if i_debug:
+                        print("#6", k, searchMinima, searchMaxima)
+                        i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
+                k = k + 1 + innerCandleLen
+                continue
+            if searchMaxima and \
+               (marubozuBlack):
+                newK = self.GetMaximaIndexInRange(imin, imax, k, i_destDictKey, i_freq)
+                if (newK != -1):
+                    self.m_data[i_destDictKey]['analysis'][i_freq]['imax_p'].append(newK)
                     if i_debug:
                         print("#6", k, searchMinima, searchMaxima)
                         i_out.write("#6 -> k=%d, searchMinima=%d, searchMaxima=%d\n" % (k, searchMinima, searchMaxima))
