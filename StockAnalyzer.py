@@ -173,6 +173,7 @@ class IntersectBasedAnalysisClass:
         rankingTable.inner_heading_row_border = True
         print(rankingTable.table)
 
+
         if EXTENDED_DEBUG:
             print("Sectors to be analyzed: ", self.sectors_to_analyze)
             print("Sectors ranking: ", self.sectors_rating)
@@ -530,10 +531,12 @@ class IntersectBasedAnalysisClass:
         stocksRankingTable = AsciiTable(sectorsPassingCond)
         stocksRankingTable.inner_heading_row_border = True
         print(stocksRankingTable.table)
+        self.out_file.write(stocksRankingTable.table)
 
         errorStocksTable = AsciiTable(errorStocks)
         errorStocksTable.inner_heading_row_border = True
         print(errorStocksTable.table)
+        self.out_file.write(errorStocksTable.table)
 
     def restoreSymbol(self, i_symbol):
         self.stocks4Analysis = load_obj(i_symbol)
