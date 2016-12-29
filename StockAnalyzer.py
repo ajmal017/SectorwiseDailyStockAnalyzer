@@ -172,6 +172,7 @@ class IntersectBasedAnalysisClass:
         rankingTable = AsciiTable(table_data)
         rankingTable.inner_heading_row_border = True
         print(rankingTable.table)
+        self.out_file.write(rankingTable.table)
 
 
         if EXTENDED_DEBUG:
