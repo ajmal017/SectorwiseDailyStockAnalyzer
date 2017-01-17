@@ -153,6 +153,8 @@ class IntersectBasedAnalysisClass:
         rankingTable.inner_heading_row_border = True
         logging.error("%s",rankingTable.table)
         self.out_file.write(rankingTable.table)
+        self.out_file.write('\n')
+        logging.error('\n')
 
         if EXTENDED_DEBUG:
             logging.error("Sectors to be analyzed: %s", self.sectors_to_analyze)
@@ -177,7 +179,7 @@ class IntersectBasedAnalysisClass:
             f = open('SectorHoldings.dat', 'r')
         elif SECTORS_SET == nINESECTORS:
             f = open('FinvizSectors.dat', 'r')
-        
+
         sectorHoldingsUrls = f.readlines()
 
         holding = sectorHoldingsUrls[index]
@@ -519,24 +521,26 @@ class IntersectBasedAnalysisClass:
             # t.start()
 
             self.analyze_sector(index)
-        
+
         # for t in threads:
             # t.join()
-        
+
         for buff in self.debug_buffers:
             for debug in buff:
                 self.out_file.write(debug)
 
+        logging.error('\n')
+        self.out_file.write('\n')
         stocksRankingTable = AsciiTable(sectorsPassingCond)
         stocksRankingTable.inner_heading_row_border = True
-        logging.error("\n")
         logging.error(stocksRankingTable.table)
         self.out_file.write(stocksRankingTable.table)
 
         errorStocksTable = AsciiTable(errorStocks)
         errorStocksTable.inner_heading_row_border = True
-        logging.error("\n")
+        logging.error('\n')
         logging.error(errorStocksTable.table)
+        self.out_file.write('\n')
         self.out_file.write(errorStocksTable.table)
 
     def restoreSymbol(self, i_symbol):
@@ -544,8 +548,8 @@ class IntersectBasedAnalysisClass:
 
     def main(self):
         # while True:
-            logging.basicConfig(level=logging.ERROR,
-                    format='(%(threadName)-10s) %(message)s',)
+            # logging.basicConfig(level=logging.ERROR, format='(%(threadName)-10s) %(message)s',)
+            logging.basicConfig(level=logging.ERROR, format='%(message)s',)
             dayOfWeek = datetime.today().weekday()
             hour = datetime.today().hour
             minute = datetime.today().minute
