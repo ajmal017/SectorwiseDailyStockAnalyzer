@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import zipfile
 import smtplib
+import math
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
@@ -94,3 +95,11 @@ def sendMail(send_from, send_to, filename):
     s = smtplib.SMTP('localhost')
     s.sendmail(send_from, send_to, msg.as_string())
     s.quit()
+
+def calc_position(entry_price, stop_price, total=7000, risk_percent=0.01):
+    # sum_to_risk = total (= 7000$) * risk_percent (= 1% = 0.01)
+    sum_to_risk = total * risk_percent
+    R = (entry_price - stop_price) / entry_price
+    position = sum_to_risk / R
+    num_shares = math.floor(position / entry_price)
+    return num_shares
