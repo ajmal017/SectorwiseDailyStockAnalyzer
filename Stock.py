@@ -1,27 +1,28 @@
-
-
-# from pandas_datareader import data, wb
-from pprint import pprint
-# from ggplot import *
-# import datetime as dt
 import matplotlib.dates as mdates
-# from yahoo_finance import Share
-# from matplotlib.finance import candlestick_ochl, candlestick2_ochl
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import pandas as pd
-# import pandas.io.data as web
 import pandas_datareader.data as web
+import fix_yahoo_finance as yf
 from numpy import *
 import numpy as np
-
 import matplotlib
 import calendar
-# from scipy.signal import argrelextrema
-
 import plotly
 from plotly.tools import FigureFactory as FF
 from plotly.graph_objs import *
+# from pandas_datareader import data, wb
+# from pprint import pprint
+# from ggplot import *
+# import datetime as dt
+# import pandas.io.data as web
+# from yahoo_finance import Share
+# from matplotlib.finance import candlestick_ochl, candlestick2_ochl
+# from scipy.signal import argrelextrema
+
+np.seterr(all='raise')
+
+yf.pdr_override() # fixes the yahoo finance issue
 
 plotly.offline.init_notebook_mode(connected=True)
 
@@ -1342,14 +1343,20 @@ class StockClass:
     # The columns of the data consist of the following:
     #       Date, Open, High, Low, Close, Volume, Adj Close
     def getData(self, i_symbol, i_destDictKey, i_freq='d'):
+        # self.m_data[i_destDictKey]['data']['d'] = web.DataReader(i_symbol, "yahoo", start=self.generalData['startDate'], interval='d')
+        # self.m_data[i_destDictKey]['data']['w'] = web.DataReader(i_symbol, "yahoo", start=self.generalData['startDate'], interval='w')
+        # self.m_data[i_destDictKey]['data']['d'] = web.get_data_yahoo(i_symbol, start=self.generalData['startDate'], interval='d')
         self.m_data[i_destDictKey]['data']['d'] = web.DataReader(i_symbol, "yahoo", start=self.generalData['startDate'], interval='d')
         self.m_data[i_destDictKey]['data']['d'] = self.m_data[i_destDictKey]['data']['d'].reset_index()
         self.m_data[i_destDictKey]['data']['w'] = web.DataReader(i_symbol, "yahoo", start=self.generalData['startDate'], interval='w')
         self.m_data[i_destDictKey]['data']['w'] = self.m_data[i_destDictKey]['data']['w'].reset_index()
         self.m_data[i_destDictKey]['data']['m'] = web.DataReader(i_symbol, "yahoo", start=self.generalData['startDate'], interval='m')
         self.m_data[i_destDictKey]['data']['m'] = self.m_data[i_destDictKey]['data']['m'].reset_index()
+        self.m_data[i_destDictKey]['data']['d'].fillna(0)
+        self.m_data[i_destDictKey]['data']['w'].fillna(0)
+        self.m_data[i_destDictKey]['data']['m'].fillna(0)
 
-        self.m_features = pd.DataFrame(pd.np.empty((len(self.m_data[i_destDictKey]['data']['d']['Date']), len(featuresTblColNames))) * 0)
+        self.m_features = pd.DataFrame(np.zeros((len(self.m_data[i_destDictKey]['data']['d']['Date']), len(featuresTblColNames))))
         self.m_features.columns = featuresTblColNames
 
     def getDataDate(self, i_freq='d', i_destDictKey='SPY'):
@@ -2044,17 +2051,17 @@ class StockClass:
             print("[trend] - Trend type: ", self.m_data[i_destDictKey]['analysis'][i_freq]['trendType'])
             i_out.write("[trend] - Trend type: %d\n" % (self.m_data[i_destDictKey]['analysis'][i_freq]['trendType']))
 
-    def emaIntersect(self, i_destDictKey='symbol', i_freq='d', i_type='short', i_dataWidth=0):
-        if (i_type == 'long'):
+    def emaIntersect(self, i_destDictKey='symbol', i_freq='d', i_type='short', i_data_width=0):
+        if i_type == 'long':
             f = self.m_data[i_destDictKey]['analysis'][i_freq]['ema50']
             g = self.m_data[i_destDictKey]['analysis'][i_freq]['ema200']
-        elif (i_type == 'short'):
+        elif i_type == 'short':
             f = self.m_data[i_destDictKey]['analysis'][i_freq]['ema14']
             g = self.m_data[i_destDictKey]['analysis'][i_freq]['ema34']
 
-        if (i_dataWidth > 0):
-            f = f[:i_dataWidth]
-            g = g[:i_dataWidth]
+        if (i_data_width > 0):
+            f = f[:i_data_width]
+            g = g[:i_data_width]
 
         if len(f) == 0 or len(g) == 0:
             return "[ERROR]: emaIntersect vectors are empty"

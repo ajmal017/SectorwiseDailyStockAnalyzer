@@ -1,9 +1,11 @@
 import requests
-from urllib.request import Request, urlopen
+# from urllib.request import Request, urlopen
+from urllib2 import urlopen
 from bs4 import BeautifulSoup
-from urllib.error import  URLError
+# from urllib.error import  URLError
 import time
-import http.client
+# import http.client # for Python 3.x
+import httplib # for Python 2.7.x
 from requests import get  # to make GET request
 
 def download(url):

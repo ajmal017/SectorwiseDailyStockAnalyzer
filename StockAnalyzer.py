@@ -1,15 +1,11 @@
 from Stock import *
 from Utils import *
 import time
-import json
-# import random
-# import os
 import csv
 import urllib
 from pandas import DataFrame
 from finviz import getFinviz
 from terminaltables import AsciiTable
-import threading
 import logging
 
 threads = []
@@ -19,7 +15,10 @@ TREND_STRENGTH_THS = 0.5  # 0.0 for debug only
 ANALYSIS_THS = 0  # 0 used for debug only
 now = datetime.now()
 EXTENDED_DEBUG = False
-DEBUG_CONDITIONS = True
+DAILY_ONLY_BASED = False
+DEBUG_CONDITIONS = False  # disable by DEFAULT
+if not DAILY_ONLY_BASED:
+    DEBUG_CONDITIONS = True # in case not running on daily only conditions
 
 RATE_1_SCORE = 20
 RATE_2_SCORE = 30
@@ -104,43 +103,52 @@ class IntersectBasedAnalysisClass:
                self.stock.m_data[sector]['analysis']['d']['trendType'] > 0:
                 rating = rating + RATE_1_SCORE
 
-            if self.stock.m_data[sector]['analysis']['d']['trendType'] == 2:  # up
-                if self.stock.m_data[sector]['analysis']['w']['moveType'] == 2:  # up
-                    rating = rating + RATE_2_SCORE * 0.5
-                if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 2:  # up
-                    rating = rating + RATE_2_SCORE * 0.125
-                if self.stock.m_data[sector]['analysis']['m']['moveType'] == 2:  # up
-                    rating = rating + RATE_2_SCORE * 0.25
-                if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 2:  # up
-                    rating = rating + RATE_2_SCORE * 0.125
-            elif self.stock.m_data[sector]['analysis']['d']['trendType'] == 1:  # down
-                if self.stock.m_data[sector]['analysis']['w']['moveType'] == 1:  # down
-                    rating = rating + RATE_2_SCORE * 0.5
-                if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 1:  # down
-                    rating = rating + RATE_2_SCORE * 0.125
-                if self.stock.m_data[sector]['analysis']['m']['moveType'] == 1:  # down
-                    rating = rating + RATE_2_SCORE * 0.25
-                if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 1:  # down
-                    rating = rating + RATE_2_SCORE * 0.125
+            if not DAILY_ONLY_BASED:
+                if self.stock.m_data[sector]['analysis']['d']['trendType'] == 2:  # up
+                    if self.stock.m_data[sector]['analysis']['w']['moveType'] == 2:  # up
+                        rating = rating + RATE_2_SCORE * 0.5
+                    if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 2:  # up
+                        rating = rating + RATE_2_SCORE * 0.125
+                    if self.stock.m_data[sector]['analysis']['m']['moveType'] == 2:  # up
+                        rating = rating + RATE_2_SCORE * 0.25
+                    if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 2:  # up
+                        rating = rating + RATE_2_SCORE * 0.125
+                elif self.stock.m_data[sector]['analysis']['d']['trendType'] == 1:  # down
+                    if self.stock.m_data[sector]['analysis']['w']['moveType'] == 1:  # down
+                        rating = rating + RATE_2_SCORE * 0.5
+                    if self.stock.m_data['SPY']['analysis']['w']['moveType'] == 1:  # down
+                        rating = rating + RATE_2_SCORE * 0.125
+                    if self.stock.m_data[sector]['analysis']['m']['moveType'] == 1:  # down
+                        rating = rating + RATE_2_SCORE * 0.25
+                    if self.stock.m_data['SPY']['analysis']['m']['moveType'] == 1:  # down
+                        rating = rating + RATE_2_SCORE * 0.125
 
             if self.stock.m_data[sector]['analysis']['d']['rs'] >= RS_THS:
                 rating = rating + RATE_3_SCORE
 
-            if (self.stock.m_data[sector]['analysis']['d']['trendType'] == 2) and \
-               (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
-               (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
-                rating = rating + RATE_4_SCORE * 0.7
-            elif (self.stock.m_data[sector]['analysis']['d']['trendType'] == 1) and \
-                 (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1) and \
-                 (self.stock.m_data[sector]['analysis']['w']['moveType'] == 1):  # up
-                rating = rating + RATE_4_SCORE * 0.7
+            if DAILY_ONLY_BASED:
+                if (self.stock.m_data[sector]['analysis']['d']['trendType'] == 2) and \
+                   (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2):  # up
+                    rating = rating + RATE_4_SCORE * 0.7
+                elif (self.stock.m_data[sector]['analysis']['d']['trendType'] == 1) and \
+                     (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1):  # up
+                    rating = rating + RATE_4_SCORE * 0.7
+            else:
+                if (self.stock.m_data[sector]['analysis']['d']['trendType'] == 2) and \
+                   (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
+                   (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
+                    rating = rating + RATE_4_SCORE * 0.7
+                elif (self.stock.m_data[sector]['analysis']['d']['trendType'] == 1) and \
+                     (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1) and \
+                     (self.stock.m_data[sector]['analysis']['w']['moveType'] == 1):  # up
+                    rating = rating + RATE_4_SCORE * 0.7
 
-            if (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
-               (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
-                rating = rating + RATE_4_SCORE * 0.3
-            elif (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1) and \
-                 (self.stock.m_data[sector]['analysis']['w']['moveType'] == 1):  # up
-                rating = rating + RATE_4_SCORE * 0.3
+                if (self.stock.m_data[sector]['analysis']['d']['moveType'] == 2) and \
+                   (self.stock.m_data[sector]['analysis']['w']['moveType'] == 2):  # up
+                    rating = rating + RATE_4_SCORE * 0.3
+                elif (self.stock.m_data[sector]['analysis']['d']['moveType'] == 1) and \
+                     (self.stock.m_data[sector]['analysis']['w']['moveType'] == 1):  # up
+                    rating = rating + RATE_4_SCORE * 0.3
 
             self.sectors_rating.append(rating)
             if rating > ANALYSIS_THS:
@@ -258,26 +266,42 @@ class IntersectBasedAnalysisClass:
             # stock.plotData(i_destDictKey='symbol', i_debug=True)
             # stock.plotlyData(i_destDictKey='symbol')
 
-            l_conditions = [int(self.stock.m_data['symbol']['analysis']['d']['intersectInd']),               # condition 0
-                            int(self.stock.m_data['SPY']['analysis']['d']['rs'] >= RS_THS),               # condition 1
-                            int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
-                                (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1) and
-                                (self.stock.m_data['symbol']['analysis']['m']['moveType'] == 1))),          # condition 2
-                            int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
-                                (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1) and
-                                (self.stock.m_data['symbol']['analysis']['m']['moveType'] == -1))),         # condition 3
-                            int(self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal']),    # condition 4
-                            int(((self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] and
-                                self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) or
-                                (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'] and
-                                self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1))),          # condition 5
-                            int((self.stock.m_data['symbol']['analysis']['d']['riskRatio'] > 0.5)),          # condition 6
-                            int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
-                                (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1))),          # condition 7
-                            int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
-                                (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1))),          # condition 8
-                            int(self.stock.m_data['symbol']['analysis']['d']['trendStrength'] > TREND_STRENGTH_THS)  # condition 9
-                            ]
+            if DAILY_ONLY_BASED:
+                l_conditions = [int(self.stock.m_data['symbol']['analysis']['d']['intersectInd']),               # condition 0
+                                int(self.stock.m_data['SPY']['analysis']['d']['rs'] >= RS_THS),               # condition 1
+                                True,          # condition 2
+                                True,         # condition 3
+                                int(self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal']),    # condition 4
+                                int(((self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] and
+                                    self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) or
+                                    (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'] and
+                                    self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1))),          # condition 5
+                                int((self.stock.m_data['symbol']['analysis']['d']['riskRatio'] > 0.5)),          # condition 6
+                                True,          # condition 7
+                                True,          # condition 8
+                                int(self.stock.m_data['symbol']['analysis']['d']['trendStrength'] > TREND_STRENGTH_THS)  # condition 9
+                                ]
+            else:
+                l_conditions = [int(self.stock.m_data['symbol']['analysis']['d']['intersectInd']),               # condition 0
+                                int(self.stock.m_data['SPY']['analysis']['d']['rs'] >= RS_THS),               # condition 1
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
+                                    (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1) and
+                                    (self.stock.m_data['symbol']['analysis']['m']['moveType'] == 1))),          # condition 2
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
+                                    (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1) and
+                                    (self.stock.m_data['symbol']['analysis']['m']['moveType'] == -1))),         # condition 3
+                                int(self.stock.m_data['symbol']['analysis']['d']['proximity2TrendReversal']),    # condition 4
+                                int(((self.stock.m_data['symbol']['analysis']['d']['lastWeeklyHigh'] and
+                                    self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) or
+                                    (self.stock.m_data['symbol']['analysis']['d']['lastWeeklyLow'] and
+                                    self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1))),          # condition 5
+                                int((self.stock.m_data['symbol']['analysis']['d']['riskRatio'] > 0.5)),          # condition 6
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 2) and
+                                    (self.stock.m_data['symbol']['analysis']['w']['moveType'] == 1))),          # condition 7
+                                int(((self.stock.m_data['symbol']['analysis']['d']['trendType'] == 1) and
+                                    (self.stock.m_data['symbol']['analysis']['w']['moveType'] == -1))),          # condition 8
+                                int(self.stock.m_data['symbol']['analysis']['d']['trendStrength'] > TREND_STRENGTH_THS)  # condition 9
+                                ]
 
             if DEBUG_CONDITIONS:
                 self.debug_buffers[index].append("Condition 0: IntersectInd=%d\n" % self.stock.m_data['symbol']['analysis']['d']['intersectInd'])
