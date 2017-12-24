@@ -1352,9 +1352,18 @@ class StockClass:
         self.m_data[i_destDictKey]['data']['w'] = self.m_data[i_destDictKey]['data']['w'].reset_index()
         self.m_data[i_destDictKey]['data']['m'] = web.DataReader(i_symbol, "yahoo", start=self.generalData['startDate'], interval='m')
         self.m_data[i_destDictKey]['data']['m'] = self.m_data[i_destDictKey]['data']['m'].reset_index()
-        self.m_data[i_destDictKey]['data']['d'].fillna(0)
-        self.m_data[i_destDictKey]['data']['w'].fillna(0)
-        self.m_data[i_destDictKey]['data']['m'].fillna(0)
+        self.m_data[i_destDictKey]['data']['d']['Low'].fillna(0)
+        self.m_data[i_destDictKey]['data']['d']['High'].fillna(0)
+        self.m_data[i_destDictKey]['data']['d']['Close'].fillna(0)
+        self.m_data[i_destDictKey]['data']['d']['Open'].fillna(0)
+        self.m_data[i_destDictKey]['data']['w']['Low'].fillna(0)
+        self.m_data[i_destDictKey]['data']['w']['High'].fillna(0)
+        self.m_data[i_destDictKey]['data']['w']['Close'].fillna(0)
+        self.m_data[i_destDictKey]['data']['w']['Open'].fillna(0)
+        self.m_data[i_destDictKey]['data']['m']['Low'].fillna(0)
+        self.m_data[i_destDictKey]['data']['m']['High'].fillna(0)
+        self.m_data[i_destDictKey]['data']['m']['Close'].fillna(0)
+        self.m_data[i_destDictKey]['data']['m']['Open'].fillna(0)
 
         self.m_features = pd.DataFrame(np.zeros((len(self.m_data[i_destDictKey]['data']['d']['Date']), len(featuresTblColNames))))
         self.m_features.columns = featuresTblColNames
@@ -1986,6 +1995,7 @@ class StockClass:
         weights /= weights.sum()
 
         res = np.convolve(values, weights, mode='full')[:len(values)]
+
         # res = np.zeros(len(values))
         res[:i_period] = res[i_period]
 
