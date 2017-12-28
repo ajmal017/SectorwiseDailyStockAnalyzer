@@ -643,19 +643,22 @@ class StockClass:
         for idx in range(len(symbolDataClose) - int(indexDiff), len(symbolDataClose)):
             indicesSymbolData.append(idx)
 
-        u1 = sum(sectorDataClose[indicesSectorData]) / indexDiff
-        u2 = sum(symbolDataClose[indicesSymbolData]) / indexDiff
-
-        cov = sum((sectorDataClose[indicesSectorData] - u1) * (symbolDataClose[indicesSymbolData] - u2))
-        v1 = sum((sectorDataClose[indicesSectorData] - u1) ** 2)
-        v2 = sum((symbolDataClose[indicesSymbolData] - u2) ** 2)
-        s1 = sqrt(v1)
-        s2 = sqrt(v2)
-
-        if s1 * s2 < 0.000001:
+        if (indexDiff == 0):
             correlation = 0
         else:
-            correlation = cov / (s1 * s2)
+            u1 = sum(sectorDataClose[indicesSectorData]) / indexDiff
+            u2 = sum(symbolDataClose[indicesSymbolData]) / indexDiff
+
+            cov = sum((sectorDataClose[indicesSectorData] - u1) * (symbolDataClose[indicesSymbolData] - u2))
+            v1 = sum((sectorDataClose[indicesSectorData] - u1) ** 2)
+            v2 = sum((symbolDataClose[indicesSymbolData] - u2) ** 2)
+            s1 = sqrt(v1)
+            s2 = sqrt(v2)
+
+            if s1 * s2 < 0.000001:
+                correlation = 0
+            else:
+                correlation = cov / (s1 * s2)
         self.m_data[i_src]['analysis'][i_freq]['rs'] = correlation
 
     # def ema(self,window):

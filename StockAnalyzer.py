@@ -1,14 +1,14 @@
 from Stock import *
 from Utils import *
-import time
-import csv
-import urllib
 from pandas import DataFrame
 from finviz import getFinviz
 from terminaltables import AsciiTable
 from Config import *
 import logging
-
+import time
+import csv
+import urllib
+import os.path
 
 class IntersectBasedAnalysisClass:
 
@@ -18,6 +18,9 @@ class IntersectBasedAnalysisClass:
     stocks4Analysis = []
     erroneousStocks = []
     out_file = 0
+    # 4DEBUG
+    # sectors_list = ['XLP']
+
     if SECTORS_SET == iSHARES_SECTORS:
         sectors_list = ['IBB', 'IYR', 'IYW', 'ICF', 'IYH', 'IYT', 'ITB', 'REM', 'IYF', 'IYE', 'IYJ',
                         'IHE', 'IHI', 'IDU', 'IYM', 'IYG', 'IAT', 'IYZ', 'SOXX', 'IYK', 'IHF', 'IYC',
@@ -25,8 +28,6 @@ class IntersectBasedAnalysisClass:
     elif SECTORS_SET == nINESECTORS:
         sectors_list = ['XLB', 'XLE', 'XLP', 'XLF', 'XLV',
                         'XLI', 'XLY', 'XLK', 'XLU']
-    # 4DEBUG
-    # sectors_list = ['XLP']
 
     sectors_to_analyze = []
     sectors_rating = []
@@ -71,7 +72,6 @@ class IntersectBasedAnalysisClass:
         idx = 0
         for sector in self.sectors_list:
             rating = 0
-
             # self.stock.plotlyData(i_destDictKey=sector)
 
             if self.stock.m_data['SPY']['analysis']['d']['trendType'] == self.stock.m_data[sector]['analysis']['d']['trendType'] and \
@@ -127,11 +127,17 @@ class IntersectBasedAnalysisClass:
                     rating = rating + RATE_4_SCORE * 0.3
 
             self.sectors_rating.append(rating)
+            idx += 1
+        # adjust the rating threshold and pick sectors for analysis
+        idx = 0
+        ANALYSIS_THS = sum(self.sectors_rating) / len(self.sectors_rating)
+        logging.error("Adjusted ANALYSIS_THS: %d", ANALYSIS_THS)
+        for sector in self.sectors_list:
+            rating = self.sectors_rating[idx]
             if rating > ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
                 table_data.append([sector, str(rating) + '/' + str(RATE_1_SCORE+RATE_2_SCORE+RATE_3_SCORE+RATE_4_SCORE)])
-
-            idx = idx + 1
+            idx += 1
 
         rankingTable = AsciiTable(table_data)
         rankingTable.inner_heading_row_border = True
@@ -152,6 +158,31 @@ class IntersectBasedAnalysisClass:
         lastEntryDate = self.stock.getDataDate()
         logging.error("Last entry date: %d/%d", lastEntryDate.day, lastEntryDate.month)
         self.out_file.write("Last entry's day: %d/%d\n" % (lastEntryDate.day, lastEntryDate.month))
+
+    def can_read_list_from_file(self, sector):
+        filename = "%s.dat" % sector
+        current_time = datetime.today()
+        current_month = current_time.month
+        if os.path.isfile(filename):
+            modification_date = time.localtime(os.stat(filename).st_mtime)
+            modification_month = modification_date[1]
+            if modification_month == current_month:
+                return True
+            else:
+                os.remove(filename)
+                return False
+
+    def read_list_from_file(self, sector):
+        filename = "%s.dat" % sector
+        with open(filename, "r") as f:
+            list = f.read().splitlines()
+            return set(list)
+
+    def write_to_file(self, sector, lst):
+        filename = "%s.dat" % sector
+        with open(filename, "w") as f:
+            for item in lst:
+                f.write("%s\n" % item)
 
     def analyze_sector(self, index):
         global SECTORS_SET
@@ -190,7 +221,11 @@ class IntersectBasedAnalysisClass:
 
             self.stocksList = df['Ticker']
         elif SECTORS_SET == nINESECTORS:
-            self.stocksList = getFinviz(holding)
+            if self.can_read_list_from_file(self.sectors_list[index]):
+                self.stocksList = self.read_list_from_file(self.sectors_list[index])
+            else:
+                self.stocksList = getFinviz(holding)
+                self.write_to_file(self.sectors_list[index], self.stocksList)
 
         self.numStocksInList = len(self.stocksList)
         logging.error("Stocks list: %s", self.stocksList)
