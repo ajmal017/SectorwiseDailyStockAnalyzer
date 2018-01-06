@@ -10,6 +10,9 @@ import csv
 import urllib
 import os.path
 
+logging.basicConfig(level=logging.INFO, format='%(message)s',)
+logger = logging.getLogger(__name__)
+
 class IntersectBasedAnalysisClass:
 
     stocksList = []
@@ -34,9 +37,7 @@ class IntersectBasedAnalysisClass:
 
     def getSectorsData(self):
         for sector in self.sectors_list:
-            if EXTENDED_DEBUG:
-                logging.error('#### Start handling %s ####', sector)
-                # self.out_file.write("#### Start handling %s ####\n" & (sector))
+            logger.debug('#### Start handling %s ####', sector)
             self.stock.getData(i_symbol=sector, i_destDictKey=sector)
             self.stock.getMovementType(i_destDictKey=sector, i_freq='d')
             self.stock.getMovementType(i_destDictKey=sector, i_freq='w')
@@ -48,14 +49,12 @@ class IntersectBasedAnalysisClass:
             self.stock.ema(i_destDictKey=sector, i_period=14)
             # self.stock.ema(i_destDictKey=sector, i_period=200)
             # self.stock.ema(i_destDictKey=sector, i_period=50)
-            if EXTENDED_DEBUG:
-                logging.error('#### End handling %s ####', sector)
-                # self.out_file.write("#### End handling %s ####\n" & (sector))
+            logger.debug('#### End handling %s ####', sector)
 
     def getSpyData(self):
-        if EXTENDED_DEBUG:
-            logging.error("#### Start handling SPY ####")
-            self.out_file.write("#### Start handling SPY ####\n")
+        logger.debug("#### Start handling SPY ####")
+        self.out_file.write("#### Start handling SPY ####\n")
+
         self.stock.getData(i_symbol='SPY', i_destDictKey='SPY')
         self.stock.getMovementType(i_destDictKey='SPY')
         self.stock.reversalPointsDetector(i_destDictKey='SPY')
@@ -64,9 +63,9 @@ class IntersectBasedAnalysisClass:
         self.stock.ema(i_destDictKey='SPY', i_period=14)
         # self.stock.ema(i_destDictKey='SPY', i_period=200)
         # self.stock.ema(i_destDictKey='SPY', i_period=50)
-        if EXTENDED_DEBUG:
-            logging.error("#### End handling SPY ####")
-            self.out_file.write("#### End handling SPY ####\n")
+
+        logger.debug("#### End handling SPY ####")
+        self.out_file.write("#### End handling SPY ####\n")
 
     def rateSectors(self):
         idx = 0
@@ -130,8 +129,9 @@ class IntersectBasedAnalysisClass:
             idx += 1
         # adjust the rating threshold and pick sectors for analysis
         idx = 0
-        ANALYSIS_THS = sum(self.sectors_rating) / len(self.sectors_rating)
-        logging.error("Adjusted ANALYSIS_THS: %d", ANALYSIS_THS)
+        np_array = np.asarray(self.sectors_rating)
+        ANALYSIS_THS = sum(self.sectors_rating) / len(np_array[np_array > 0])
+        logger.info("Adjusted ANALYSIS_THS: %d", ANALYSIS_THS)
         for sector in self.sectors_list:
             rating = self.sectors_rating[idx]
             if rating > ANALYSIS_THS:
@@ -141,22 +141,21 @@ class IntersectBasedAnalysisClass:
 
         rankingTable = AsciiTable(table_data)
         rankingTable.inner_heading_row_border = True
-        logging.error("%s",rankingTable.table)
+        logger.info("%s", rankingTable.table)
         self.out_file.write(rankingTable.table)
         self.out_file.write('\n')
-        logging.error('\n')
+        logger.info('\n')
 
-        if EXTENDED_DEBUG:
-            logging.error("Sectors to be analyzed: %s", self.sectors_to_analyze)
-            logging.error("Sectors ranking: %s", self.sectors_rating)
-            self.out_file.write("Sectors to be analyzed and it rank:\n")
-            for sector in self.sectors_to_analyze:
-                self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
+        logger.debug("Sectors to be analyzed: %s", self.sectors_to_analyze)
+        logger.debug("Sectors ranking: %s", self.sectors_rating)
+        self.out_file.write("Sectors to be analyzed and it rank:\n")
+        for sector in self.sectors_to_analyze:
+            self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
 
     def checkIfUpdate(self):
         # day = datetime.today().day
         lastEntryDate = self.stock.getDataDate()
-        logging.error("Last entry date: %d/%d", lastEntryDate.day, lastEntryDate.month)
+        logger.info("Last entry date: %d/%d", lastEntryDate.day, lastEntryDate.month)
         self.out_file.write("Last entry's day: %d/%d\n" % (lastEntryDate.day, lastEntryDate.month))
 
     def can_read_list_from_file(self, sector):
@@ -199,8 +198,8 @@ class IntersectBasedAnalysisClass:
 
         holding = sectorHoldingsUrls[index]
 
-        logging.error("\n")
-        logging.error("Holding[%s]: %s", self.sectors_list[index], holding)
+        logger.info("\n")
+        logger.info("Holding[%s]: %s", self.sectors_list[index], holding)
         self.debug_buffers[index].append("Holding[%d]: %s\n" % (index, holding))
         self.debug_buffers[index].append("Sector: %s, Rank: %f\n" % (self.sectors_list[index], self.sectors_rating[index]))
 
@@ -228,7 +227,7 @@ class IntersectBasedAnalysisClass:
                 self.write_to_file(self.sectors_list[index], self.stocksList)
 
         self.numStocksInList = len(self.stocksList)
-        logging.error("Stocks list: %s", self.stocksList)
+        logger.info("Stocks list: %s", self.stocksList)
 
         for symbolName in self.stocksList:
             # stock = Stock(name=symbolName)
@@ -237,20 +236,17 @@ class IntersectBasedAnalysisClass:
             # get data of required symbol
             idx = idx + 1
             cond = 1
-            if EXTENDED_DEBUG:
-                logging.error('#### [%d/%d]: Start handling [%s] ####', idx, self.numStocksInList, symbolName)
-                self.debug_buffers[index].append("#### [ %d / %d ]: Start handling [ %s ] ####\n" % (idx, self.numStocksInList, symbolName))
-            else:
-                logging.error('[%d/%d]', idx, self.numStocksInList)
-                self.debug_buffers[index].append("[ %d / %d ]\n" % (idx, self.numStocksInList))
+
+            logger.info('#### [%d/%d]: Start handling [%s] ####', idx, self.numStocksInList, symbolName)
+            self.debug_buffers[index].append("#### [ %d / %d ]: Start handling [ %s ] ####\n" % (idx, self.numStocksInList, symbolName))
+
             try:
                 self.stock.getData(i_symbol=symbolName, i_destDictKey='symbol')
             except:
                 self.erroneousStocks.append(symbolName)
                 save_obj(self.erroneousStocks, 'erroneousStocks_' + ANALYSIS_TYPE)
                 errorStocks.append([symbolName, self.sectors_list[index]])
-                # if EXTENDED_DEBUG:
-                logging.error('!!!! GetData ERROR !!!!')
+                logger.warning('!!!! GetData ERROR !!!!')
                 self.debug_buffers[index].append('!!!! GetData ERROR !!!!\n')
                 continue
 
@@ -337,20 +333,19 @@ class IntersectBasedAnalysisClass:
                                         self.stock.m_data['SPY']['analysis']['w']['moveType'],
                                         self.stock.m_data['SPY']['analysis']['m']['moveType']))
 
-            if EXTENDED_DEBUG:
-                logging.error('Conditions: %d', l_conditions)
-                self.debug_buffers[index].append("Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (l_conditions[0],
-                                                                                    l_conditions[1],
-                                                                                    l_conditions[2],
-                                                                                    l_conditions[3],
-                                                                                    l_conditions[4],
-                                                                                    l_conditions[5],
-                                                                                    l_conditions[6],
-                                                                                    l_conditions[7],
-                                                                                    l_conditions[8],
-                                                                                    l_conditions[9],
-                                                                                    sum(l_conditions),
-                                                                                    len(l_conditions)))
+            logger.debug('Conditions: %d', l_conditions)
+            self.debug_buffers[index].append("Conditions: %d %d %d %d %d %d %d %d %d %d -> [%d/%d]\n" % (l_conditions[0],
+                                                                                l_conditions[1],
+                                                                                l_conditions[2],
+                                                                                l_conditions[3],
+                                                                                l_conditions[4],
+                                                                                l_conditions[5],
+                                                                                l_conditions[6],
+                                                                                l_conditions[7],
+                                                                                l_conditions[8],
+                                                                                l_conditions[9],
+                                                                                sum(l_conditions),
+                                                                                len(l_conditions)))
             if (l_conditions[7] or l_conditions[8]) and \
                 l_conditions[6] and l_conditions[4]:
                 # save_obj(self.stock, symbolName)
@@ -539,9 +534,8 @@ class IntersectBasedAnalysisClass:
             else:
                 cond += 1
 
-            if EXTENDED_DEBUG:
-                logging.error('#### End handling [%s] ####', symbolName)
-                self.debug_buffers[index].append("#### End handling [ %s ] ####\n" % symbolName)
+            logger.debug('#### End handling [%s] ####', symbolName)
+            self.debug_buffers[index].append("#### End handling [ %s ] ####\n" % symbolName)
 
     def analyze_sectors(self):
         global sectorsPassingCond
@@ -555,18 +549,20 @@ class IntersectBasedAnalysisClass:
             for debug in buff:
                 self.out_file.write(debug)
 
-        logging.error('\n')
+        logger.info('\n')
         self.out_file.write('\n')
         stocksRankingTable = AsciiTable(sectorsPassingCond)
         stocksRankingTable.inner_heading_row_border = True
-        logging.error(stocksRankingTable.table)
+        logger.info(stocksRankingTable.table)
         self.out_file.write(stocksRankingTable.table)
 
         errorStocksTable = AsciiTable(errorStocks)
         errorStocksTable.inner_heading_row_border = True
-        logging.error('\n')
-        logging.error(errorStocksTable.table)
+        logger.info('\n')
+        logger.info('Stocks with ERRORs')
+        logger.info(errorStocksTable.table)
         self.out_file.write('\n')
+        self.out_file.write('Stocks with ERRORs')
         self.out_file.write(errorStocksTable.table)
 
     def restoreSymbol(self, i_symbol):
@@ -574,8 +570,6 @@ class IntersectBasedAnalysisClass:
 
     def main(self):
         # while True:
-            # logging.basicConfig(level=logging.ERROR, format='(%(threadName)-10s) %(message)s',)
-            logging.basicConfig(level=logging.ERROR, format='%(message)s',)
             dayOfWeek = datetime.today().weekday()
             hour = datetime.today().hour
             minute = datetime.today().minute
@@ -592,7 +586,7 @@ class IntersectBasedAnalysisClass:
                 self.analyze_sectors()
                 self.out_file.close()
             else:
-                logging.error('DaylOfWeek: %s hour: %s minute: %s sleep 60s - waiting...',str(dayOfWeek),str(hour+3),str(minute))
+                logger.warning('DaylOfWeek: %s hour: %s minute: %s sleep 60s - waiting...', str(dayOfWeek), str(hour+3), str(minute))
                 time.sleep(60)
 
 # ----------------- Main program -------------------

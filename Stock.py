@@ -721,26 +721,30 @@ class StockClass:
         iminLastIdx = len(l_imin) - 1
         imaxLastIdx = len(l_imax) - 1
 
-        if (iminLastIdx > 0) and (imaxLastIdx > 0):
-            if (l_imin[iminLastIdx] > l_imax[imaxLastIdx]):  # last is MIN
-                upTrend = (l_dataLow[l_imin[iminLastIdx]] > l_dataLow[l_imin[iminLastIdx - 1]]) and \
-                          (l_dataLow[l_imin[iminLastIdx - 1]] > l_dataLow[l_imin[iminLastIdx - 2]]) and \
-                          (l_dataHigh[l_imax[imaxLastIdx]] > l_dataHigh[l_imax[imaxLastIdx - 1]]) and \
-                          (l_dataHigh[l_imax[imaxLastIdx - 1]] > l_dataHigh[l_imax[imaxLastIdx - 2]])
-                trendStrength = (l_dataLow[l_imin[iminLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]]) / (l_dataHigh[l_imax[imaxLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]])
-            elif (l_imin[iminLastIdx] < l_imax[imaxLastIdx]):  # last is MAX
-                downTrend = (l_dataLow[l_imin[iminLastIdx]] < l_dataLow[l_imin[iminLastIdx - 1]]) and \
-                            (l_dataLow[l_imin[iminLastIdx - 1]] < l_dataLow[l_imin[iminLastIdx - 2]]) and \
-                            (l_dataHigh[l_imax[imaxLastIdx]] < l_dataHigh[l_imax[imaxLastIdx - 1]]) and \
-                            (l_dataHigh[l_imax[imaxLastIdx - 1]] < l_dataHigh[l_imax[imaxLastIdx - 2]])
-                trendStrength = (l_dataHigh[l_imax[imaxLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]]) / (l_dataLow[l_imin[iminLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]])
+        try:
+            if (iminLastIdx > 0) and (imaxLastIdx > 0):
+                if (l_imin[iminLastIdx] > l_imax[imaxLastIdx]):  # last is MIN
+                    upTrend = (l_dataLow[l_imin[iminLastIdx]] > l_dataLow[l_imin[iminLastIdx - 1]]) and \
+                              (l_dataLow[l_imin[iminLastIdx - 1]] > l_dataLow[l_imin[iminLastIdx - 2]]) and \
+                              (l_dataHigh[l_imax[imaxLastIdx]] > l_dataHigh[l_imax[imaxLastIdx - 1]]) and \
+                              (l_dataHigh[l_imax[imaxLastIdx - 1]] > l_dataHigh[l_imax[imaxLastIdx - 2]])
+                    trendStrength = (l_dataLow[l_imin[iminLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]]) / (l_dataHigh[l_imax[imaxLastIdx]] - l_dataLow[l_imin[iminLastIdx - 1]])
+                elif (l_imin[iminLastIdx] < l_imax[imaxLastIdx]):  # last is MAX
+                    downTrend = (l_dataLow[l_imin[iminLastIdx]] < l_dataLow[l_imin[iminLastIdx - 1]]) and \
+                                (l_dataLow[l_imin[iminLastIdx - 1]] < l_dataLow[l_imin[iminLastIdx - 2]]) and \
+                                (l_dataHigh[l_imax[imaxLastIdx]] < l_dataHigh[l_imax[imaxLastIdx - 1]]) and \
+                                (l_dataHigh[l_imax[imaxLastIdx - 1]] < l_dataHigh[l_imax[imaxLastIdx - 2]])
+                    trendStrength = (l_dataHigh[l_imax[imaxLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]]) / (l_dataLow[l_imin[iminLastIdx]] - l_dataHigh[l_imax[imaxLastIdx - 1]])
+                elif i_debug:
+                    print("[Trend] ERROR_1")
+                    i_out.write('[Trend] ERROR_1\n')
             elif i_debug:
-                print("[Trend] ERROR_1")
-                i_out.write('[Trend] ERROR_1\n')
+                print("[Trend] ERROR_2")
+                i_out.write('[Trend] ERROR_2\n')
+        except:
+            upTrend = False
+            downTrend = False
 
-        elif i_debug:
-            print("[Trend] ERROR_2")
-            i_out.write('[Trend] ERROR_2\n')
 
         # save the trend strength only in case of symbol data analysis for the daily stock timeframe
         if (upTrend or downTrend) and \
