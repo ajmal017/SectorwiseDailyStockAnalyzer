@@ -482,7 +482,7 @@ class IntersectBasedAnalysisClass:
             else:
                 cond += 1
             if (l_conditions[7] or l_conditions[8]) and \
-                l_conditions[6] and l_conditions[4]:
+                l_conditions[6]:
                 # save_obj(self.stock, symbolName)
                 self.stocks4Analysis.append(symbolName)
                 sectorsPassingCond.append([symbolName, self.sectors_list[index], str(cond),

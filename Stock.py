@@ -429,6 +429,8 @@ class StockClass:
 
             # #6:
             candleSize = l_dataHigh[k] - l_dataLow[k]
+            if candleSize == 0:
+                candleSize = 0.001
             marubozuSize = l_dataClose[k] - l_dataOpen[k]
             marubozuWhite = (marubozuSize > 0) and  \
                             (marubozuSize / candleSize >= 0.9)
@@ -445,6 +447,8 @@ class StockClass:
                 continue
             # #6:
             candleSize = l_dataHigh[k] - l_dataLow[k]
+            if candleSize == 0:
+                candleSize = 0.001
             marubozuSize = l_dataClose[k] - l_dataOpen[k]
             marubozuWhite = (marubozuSize > 0) and  \
                             (marubozuSize / candleSize >= 0.9)
