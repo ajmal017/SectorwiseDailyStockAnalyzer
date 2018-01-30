@@ -1,7 +1,7 @@
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas_datareader.data as web
-import fix_yahoo_finance as yf
+# import fix_yahoo_finance as yf
 import pandas as pd
 import numpy as np
 import plotly
@@ -9,6 +9,7 @@ from numpy import *
 from plotly.tools import FigureFactory as FF
 from plotly.graph_objs import *
 from datetime import datetime, timedelta
+from Config import *
 # from pandas_datareader import data, wb
 # from pprint import pprint
 # from ggplot import *
@@ -21,25 +22,9 @@ import matplotlib
 import calendar
 
 np.seterr(all='raise')
-yf.pdr_override() # fixes the yahoo finance issue
+# yf.pdr_override() # fixes the yahoo finance issue
 plotly.offline.init_notebook_mode(connected=True)
 plt.style.use('ggplot')
-
-# defines
-MIN_VECTOR_LEN = 200
-BACKOFF_LENGTH = 6  # meaning 5 days
-
-#####################################
-__author__ = 'T.G.'
-#####################################
-
-DAILY_MONTH_DATA_BACKOFF = timedelta(days=31 * 6)
-WEEKLY_YEAR_DATA_BACKOFF = timedelta(days=365 * 1)
-MONTHLY_YEAR_DATA_BACKOFF = timedelta(days=365 * 3)
-TEMP = timedelta(days=150)
-
-# trendStrength
-featuresTblColNames = ['trend', 'weeklyMove', 'monthlyMove', 'emaIntersection', 'currCloseBeyondLastExt', 'proximity2TrendReversal', 'riskRatio']
 
 class StockClass:
 
@@ -1359,12 +1344,6 @@ class StockClass:
 
     def getDataDate(self, i_freq='d', i_destDictKey='SPY'):
         return self.m_data[i_destDictKey]['data'][i_freq]['Date'][len(self.m_data[i_destDictKey]['data'][i_freq]['Date']) - 1]
-
-    # def plotlyGraphs(self, i_type=None, i_freq='d', i_debug=False, i_out=None, i_tickerList=None):
-
-    #     if i_type == "SECTOR":
-    #         for ticker in i_tickerList:
-    #             trace +
 
     def plotlyData(self, i_destDictKey, i_freq='d', i_debug=False, i_out=None):
         l_data = self.m_data[i_destDictKey]['data'][i_freq]

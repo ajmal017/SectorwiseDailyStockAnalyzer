@@ -3,7 +3,7 @@ from Utils import *
 from pandas import DataFrame
 from finviz import getFinviz
 from terminaltables import AsciiTable
-
+from Config import *
 import logging
 import time
 import csv
@@ -12,33 +12,6 @@ import os.path
 
 logging.basicConfig(level=logging.INFO, format='%(message)s',)
 logger = logging.getLogger(__name__)
-
-
-threads = []
-ANALYSIS_TYPE = 'short'  # 'long'
-RS_THS = 0.7
-TREND_STRENGTH_THS = 0.5  # 0.0 for debug only
-ANALYSIS_THS = 0  # 0 used for debug only
-now = datetime.now()
-EXTENDED_DEBUG = False
-DAILY_ONLY_BASED = False
-DEBUG_CONDITIONS = False  # disable by DEFAULT
-if not DAILY_ONLY_BASED:
-    DEBUG_CONDITIONS = True # in case not running on daily only conditions
-
-RATE_1_SCORE = 20
-RATE_2_SCORE = 30
-RATE_3_SCORE = 25
-RATE_4_SCORE = 25
-
-iSHARES_SECTORS = "iShares"
-nINESECTORS = "nineSectors"
-
-SECTORS_SET = nINESECTORS
-table_data = [['Sector', 'Raking']]
-sectorsPassingCond = [['Ticker', 'Sector', 'Condition', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']]
-errorStocks = [['Ticker', 'Sector']]
-cond = 1
 
 class IntersectBasedAnalysisClass:
 
