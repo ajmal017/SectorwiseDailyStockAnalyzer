@@ -8,8 +8,7 @@ import plotly
 from numpy import *
 from plotly.tools import FigureFactory as FF
 from plotly.graph_objs import *
-from DataStructures import Data
-from Config import *
+from datetime import datetime, timedelta
 # from pandas_datareader import data, wb
 # from pprint import pprint
 # from ggplot import *
@@ -26,10 +25,1191 @@ yf.pdr_override() # fixes the yahoo finance issue
 plotly.offline.init_notebook_mode(connected=True)
 plt.style.use('ggplot')
 
+# defines
+MIN_VECTOR_LEN = 200
+BACKOFF_LENGTH = 6  # meaning 5 days
+
+#####################################
+__author__ = 'T.G.'
+#####################################
+
+DAILY_MONTH_DATA_BACKOFF = timedelta(days=31 * 6)
+WEEKLY_YEAR_DATA_BACKOFF = timedelta(days=365 * 1)
+MONTHLY_YEAR_DATA_BACKOFF = timedelta(days=365 * 3)
+TEMP = timedelta(days=150)
+
+# trendStrength
+featuresTblColNames = ['trend', 'weeklyMove', 'monthlyMove', 'emaIntersection', 'currCloseBeyondLastExt', 'proximity2TrendReversal', 'riskRatio']
 
 class StockClass:
-    generalData = dict(name='', endDate='', startDate='')
-    m_data = Data
+
+    generalData = {'name': '',
+                   'endDate': '',
+                   'startDate': ''
+                   }
+
+    m_data = {'symbol': {'data': {'d': pd.DataFrame(),
+                                  'w': pd.DataFrame(),
+                                  'm': pd.DataFrame()},
+                         'analysis': {'d': {'localMins': np.empty(shape=0),
+                                            'localMaxs': np.empty(shape=0),
+                                            'moveType': 0,  # 2 = up, 1 = down
+                                            'trendType': 0,  # 2 = Up, 1 = down, 0 = init
+                                            'trendStrength': 0,
+                                            'imin': [],
+                                            'imax': [],
+                                            'imin_p': [],
+                                            'imax_p': [],
+                                            'ema34': [],
+                                            'ema14': [],
+                                            'ema200': [],
+                                            'ema50': [],
+                                            'rs': 0,
+                                            'intersectVec': [],
+                                            'intersectInd': False,
+                                            'lastWeeklyHigh': 0.0,
+                                            'lastWeeklyLow': 0.0,
+                                            'proximity2TrendReversal': False,
+                                            'riskRatio': 0.0},
+                                      'w': {'localMins': np.empty(shape=0),
+                                            'localMaxs': np.empty(shape=0),
+                                            'moveType': 0,
+                                            'imin': [],
+                                            'imax': [],
+                                            'imin_p': [],
+                                            'imax_p': [],
+                                            'ema34': [],
+                                            'ema14': []},
+                                      'm': {'localMins': np.empty(shape=0),
+                                            'localMaxs': np.empty(shape=0),
+                                            'moveType': 0,
+                                            'imin': [],
+                                            'imax': [],
+                                            'imin_p': [],
+                                            'imax_': []}}},
+
+              'SPY': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': []}}},
+
+              'IBB': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYR': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYW': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'ICF': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYH': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYT': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'ITB': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'REM': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYF': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYE': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYJ': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IHE': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IHI': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IDU': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYM': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYG': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IAT': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYZ': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'SOXX': {'data': {'d': pd.DataFrame(),
+                                'w': pd.DataFrame(),
+                                'm': pd.DataFrame()},
+                       'analysis': {'d': {'localMins': np.empty(shape=0),
+                                          'localMaxs': np.empty(shape=0),
+                                          'moveType': 0,
+                                          'imin': [],
+                                          'imax': [],
+                                          'imin_p': [],
+                                         'imax_p': [],
+                                          'rs': 0,
+                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                    'w': {'localMins': np.empty(shape=0),
+                                          'localMaxs': np.empty(shape=0),
+                                          'moveType': 0,
+                                          'imin': [],
+                                          'imax': [],
+                                          'imin_p': [],
+                                         'imax_p': [],
+                                          'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                    'm': {'localMins': np.empty(shape=0),
+                                          'localMaxs': np.empty(shape=0),
+                                          'moveType': 0,
+                                          'imin': [],
+                                          'imax': [],
+                                          'imin_p': [],
+                                          'imax_p': []}}},
+
+              'IYK': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IHF': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IYC': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IEO': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IEZ': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'ITA': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'REZ': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IAI': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'IAK': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'FTY': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+
+              'XLB': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLE': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLP': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLF': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLV': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLI': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLY': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLK': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}},
+              'XLU': {'data': {'d': pd.DataFrame(),
+                               'w': pd.DataFrame(),
+                               'm': pd.DataFrame()},
+                      'analysis': {'d': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'rs': 0,
+                                         'trendType': 0,
+                                         'ema34': [],
+                                         'ema14': [],
+                                         'ema200': [],
+                                         'ema50': []},  # 2 = Up, 1 = down, 0 = init
+                                   'w': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': [],
+                                         'trendType': 0},  # 2 = Up, 1 = down, 0 = init
+                                   'm': {'localMins': np.empty(shape=0),
+                                         'localMaxs': np.empty(shape=0),
+                                         'moveType': 0,
+                                         'imin': [],
+                                         'imax': [],
+                                         'imin_p': [],
+                                         'imax_p': []}}}
+              }
+
     m_features = pd.DataFrame()
 
     # initialize the basic parameters of the "Stock" class:
@@ -42,6 +1222,119 @@ class StockClass:
         # self.generalData['sector'] = sector
         self.generalData['endDate'] = datetime(end.year, end.month, end.day)
         self.generalData['startDate'] = self.generalData['endDate'] - DAILY_MONTH_DATA_BACKOFF
+
+        if name == '':
+            for key in self.m_data.keys():
+                self.m_data[key]['data']['d'] = pd.DataFrame()
+                self.m_data[key]['data']['w'] = pd.DataFrame()
+                self.m_data[key]['data']['m'] = pd.DataFrame()
+
+                self.m_data[key]['analysis']['d']['localMins'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['d']['localMaxs'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['d']['moveType'] = 0
+                self.m_data[key]['analysis']['d']['trendType'] = 0
+                self.m_data[key]['analysis']['d']['trendStrength'] = 0.0
+                self.m_data[key]['analysis']['d']['imin'] = []
+                self.m_data[key]['analysis']['d']['imax'] = []
+                self.m_data[key]['analysis']['d']['imin_p'] = []
+                self.m_data[key]['analysis']['d']['imax_p'] = []
+                self.m_data[key]['analysis']['d']['ema34'] = []
+                self.m_data[key]['analysis']['d']['ema14'] = []
+                self.m_data[key]['analysis']['d']['ema200'] = []
+                self.m_data[key]['analysis']['d']['ema50'] = []
+                self.m_data[key]['analysis']['d']['rs'] = 0
+                self.m_data[key]['analysis']['d']['intersectVec'] = []
+                self.m_data[key]['analysis']['d']['intersectInd'] = False
+                self.m_data[key]['analysis']['d']['lastWeeklyHigh'] = 0.0
+                self.m_data[key]['analysis']['d']['lastWeeklyLow'] = 0.0
+                self.m_data[key]['analysis']['d']['proximity2TrendReversal'] = False
+                self.m_data[key]['analysis']['d']['riskRatio'] = 0.0
+
+                self.m_data[key]['analysis']['w']['localMins'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['w']['localMaxs'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['w']['moveType'] = 0
+                self.m_data[key]['analysis']['w']['trendType'] = 0
+                self.m_data[key]['analysis']['w']['imin'] = []
+                self.m_data[key]['analysis']['w']['imax'] = []
+                self.m_data[key]['analysis']['w']['imin_p'] = []
+                self.m_data[key]['analysis']['w']['imax_p'] = []
+                # self.m_data[key]['analysis']['d']['ema34'] = []
+                # self.m_data[key]['analysis']['d']['ema14'] = []
+                # self.m_data[key]['analysis']['d']['ema200'] = []
+                # self.m_data[key]['analysis']['d']['ema50'] = []
+                # self.m_data[key]['analysis']['d']['rs'] = 0
+                # self.m_data[key]['analysis']['d']['intersectVec'] = []
+
+                self.m_data[key]['analysis']['m']['localMins'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['m']['localMaxs'] = np.empty(shape=0)
+                self.m_data[key]['analysis']['m']['moveType'] = 0
+                self.m_data[key]['analysis']['m']['trendType'] = 0
+                self.m_data[key]['analysis']['m']['imin'] = []
+                self.m_data[key]['analysis']['m']['imax'] = []
+                self.m_data[key]['analysis']['m']['imin_p'] = []
+                self.m_data[key]['analysis']['m']['imax_p'] = []
+                # self.m_data[key]['analysis']['d']['ema34'] = []
+                # self.m_data[key]['analysis']['d']['ema14'] = []
+                # self.m_data[key]['analysis']['d']['ema200'] = []
+                # self.m_data[key]['analysis']['d']['ema50'] = []
+                # self.m_data[key]['analysis']['d']['rs'] = 0
+                # self.m_data[key]['analysis']['d']['intersectVec'] = []
+        else:
+            key = 'symbol'
+            self.m_data[key]['data']['d'] = pd.DataFrame()
+            self.m_data[key]['data']['w'] = pd.DataFrame()
+            self.m_data[key]['data']['m'] = pd.DataFrame()
+
+            self.m_data[key]['analysis']['d']['localMins'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['d']['localMaxs'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['d']['moveType'] = 0
+            self.m_data[key]['analysis']['d']['trendType'] = 0
+            self.m_data[key]['analysis']['d']['trendStrength'] = 0.0
+            self.m_data[key]['analysis']['d']['imin'] = []
+            self.m_data[key]['analysis']['d']['imax'] = []
+            self.m_data[key]['analysis']['d']['imin_p'] = []
+            self.m_data[key]['analysis']['d']['imax_p'] = []
+            self.m_data[key]['analysis']['d']['ema34'] = []
+            self.m_data[key]['analysis']['d']['ema14'] = []
+            self.m_data[key]['analysis']['d']['ema200'] = []
+            self.m_data[key]['analysis']['d']['ema50'] = []
+            self.m_data[key]['analysis']['d']['rs'] = 0
+            self.m_data[key]['analysis']['d']['intersectVec'] = []
+            self.m_data[key]['analysis']['d']['intersectInd'] = False
+            self.m_data[key]['analysis']['d']['lastWeeklyHigh'] = 0.0
+            self.m_data[key]['analysis']['d']['lastWeeklyLow'] = 0.0
+            self.m_data[key]['analysis']['d']['proximity2TrendReversal'] = False
+            self.m_data[key]['analysis']['d']['riskRatio'] = 0.0
+
+            self.m_data[key]['analysis']['w']['localMins'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['w']['localMaxs'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['w']['moveType'] = 0
+            self.m_data[key]['analysis']['w']['trendType'] = 0
+            self.m_data[key]['analysis']['w']['imin'] = []
+            self.m_data[key]['analysis']['w']['imax'] = []
+            self.m_data[key]['analysis']['w']['imin_p'] = []
+            self.m_data[key]['analysis']['w']['imax_p'] = []
+            # self.m_data[key]['analysis']['d']['ema34'] = []
+            # self.m_data[key]['analysis']['d']['ema14'] = []
+            # self.m_data[key]['analysis']['d']['ema200'] = []
+            # self.m_data[key]['analysis']['d']['ema50'] = []
+            # self.m_data[key]['analysis']['d']['rs'] = 0
+            # self.m_data[key]['analysis']['d']['intersectVec'] = []
+
+            self.m_data[key]['analysis']['m']['localMins'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['m']['localMaxs'] = np.empty(shape=0)
+            self.m_data[key]['analysis']['m']['moveType'] = 0
+            self.m_data[key]['analysis']['m']['trendType'] = 0
+            self.m_data[key]['analysis']['m']['imin'] = []
+            self.m_data[key]['analysis']['m']['imax'] = []
+            self.m_data[key]['analysis']['m']['imin_p'] = []
+            self.m_data[key]['analysis']['m']['imax_p'] = []
+            # self.m_data[key]['analysis']['d']['ema34'] = []
+            # self.m_data[key]['analysis']['d']['ema14'] = []
+            # self.m_data[key]['analysis']['d']['ema200'] = []
+            # self.m_data[key]['analysis']['d']['ema50'] = []
+            # self.m_data[key]['analysis']['d']['rs'] = 0
+            # self.m_data[key]['analysis']['d']['intersectVec'] = []
 
     # get the historical stock data for daily, weekly and monthly time frequencies
     # The columns of the data consist of the following:
@@ -66,6 +1359,12 @@ class StockClass:
 
     def getDataDate(self, i_freq='d', i_destDictKey='SPY'):
         return self.m_data[i_destDictKey]['data'][i_freq]['Date'][len(self.m_data[i_destDictKey]['data'][i_freq]['Date']) - 1]
+
+    # def plotlyGraphs(self, i_type=None, i_freq='d', i_debug=False, i_out=None, i_tickerList=None):
+
+    #     if i_type == "SECTOR":
+    #         for ticker in i_tickerList:
+    #             trace +
 
     def plotlyData(self, i_destDictKey, i_freq='d', i_debug=False, i_out=None):
         l_data = self.m_data[i_destDictKey]['data'][i_freq]

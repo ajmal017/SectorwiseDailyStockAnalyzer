@@ -3,7 +3,7 @@ from Utils import *
 from pandas import DataFrame
 from finviz import getFinviz
 from terminaltables import AsciiTable
-from Config import *
+
 import logging
 import time
 import csv
@@ -13,6 +13,33 @@ import os.path
 logging.basicConfig(level=logging.INFO, format='%(message)s',)
 logger = logging.getLogger(__name__)
 
+
+threads = []
+ANALYSIS_TYPE = 'short'  # 'long'
+RS_THS = 0.7
+TREND_STRENGTH_THS = 0.5  # 0.0 for debug only
+ANALYSIS_THS = 0  # 0 used for debug only
+now = datetime.now()
+EXTENDED_DEBUG = False
+DAILY_ONLY_BASED = False
+DEBUG_CONDITIONS = False  # disable by DEFAULT
+if not DAILY_ONLY_BASED:
+    DEBUG_CONDITIONS = True # in case not running on daily only conditions
+
+RATE_1_SCORE = 20
+RATE_2_SCORE = 30
+RATE_3_SCORE = 25
+RATE_4_SCORE = 25
+
+iSHARES_SECTORS = "iShares"
+nINESECTORS = "nineSectors"
+
+SECTORS_SET = nINESECTORS
+table_data = [['Sector', 'Raking']]
+sectorsPassingCond = [['Ticker', 'Sector', 'Condition', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']]
+errorStocks = [['Ticker', 'Sector']]
+cond = 1
+
 class IntersectBasedAnalysisClass:
 
     stocksList = []
@@ -21,9 +48,6 @@ class IntersectBasedAnalysisClass:
     stocks4Analysis = []
     erroneousStocks = []
     out_file = 0
-    # 4DEBUG
-    # sectors_list = ['XLP']
-
     if SECTORS_SET == iSHARES_SECTORS:
         sectors_list = ['IBB', 'IYR', 'IYW', 'ICF', 'IYH', 'IYT', 'ITB', 'REM', 'IYF', 'IYE', 'IYJ',
                         'IHE', 'IHI', 'IDU', 'IYM', 'IYG', 'IAT', 'IYZ', 'SOXX', 'IYK', 'IHF', 'IYC',
@@ -31,6 +55,8 @@ class IntersectBasedAnalysisClass:
     elif SECTORS_SET == nINESECTORS:
         sectors_list = ['XLB', 'XLE', 'XLP', 'XLF', 'XLV',
                         'XLI', 'XLY', 'XLK', 'XLU']
+    # 4DEBUG
+    # sectors_list = ['XLB']
 
     sectors_to_analyze = []
     sectors_rating = []
@@ -133,8 +159,9 @@ class IntersectBasedAnalysisClass:
         ANALYSIS_THS = sum(self.sectors_rating) / len(np_array[np_array > 0])
         logger.info("Adjusted ANALYSIS_THS: %d", ANALYSIS_THS)
         for sector in self.sectors_list:
+            logger.info("rating[%s]: %d", sector, self.sectors_rating[idx])
             rating = self.sectors_rating[idx]
-            if rating > ANALYSIS_THS:
+            if rating >= ANALYSIS_THS:
                 self.sectors_to_analyze.append(idx)
                 table_data.append([sector, str(rating) + '/' + str(RATE_1_SCORE+RATE_2_SCORE+RATE_3_SCORE+RATE_4_SCORE)])
             idx += 1
@@ -195,7 +222,6 @@ class IntersectBasedAnalysisClass:
             f = open('FinvizSectors.dat', 'r')
 
         sectorHoldingsUrls = f.readlines()
-
         holding = sectorHoldingsUrls[index]
 
         logger.info("\n")
@@ -228,6 +254,9 @@ class IntersectBasedAnalysisClass:
 
         self.numStocksInList = len(self.stocksList)
         logger.info("Stocks list: %s", self.stocksList)
+
+        # 4DEBUG
+        # self.stocksList = ['BGH']
 
         for symbolName in self.stocksList:
             # stock = Stock(name=symbolName)
@@ -562,7 +591,7 @@ class IntersectBasedAnalysisClass:
         logger.info('Stocks with ERRORs')
         logger.info(errorStocksTable.table)
         self.out_file.write('\n')
-        self.out_file.write('Stocks with ERRORs')
+        self.out_file.write('Stocks with ERRORs\n')
         self.out_file.write(errorStocksTable.table)
 
     def restoreSymbol(self, i_symbol):
