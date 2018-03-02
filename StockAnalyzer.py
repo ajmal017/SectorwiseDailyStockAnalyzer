@@ -29,7 +29,7 @@ class IntersectBasedAnalysisClass:
         sectors_list = ['XLB', 'XLE', 'XLP', 'XLF', 'XLV',
                         'XLI', 'XLY', 'XLK', 'XLU']
     # 4DEBUG
-    # sectors_list = ['XLB']
+    # sectors_list = ['XLF']
 
     sectors_to_analyze = []
     sectors_rating = []
@@ -229,7 +229,7 @@ class IntersectBasedAnalysisClass:
         logger.info("Stocks list: %s", self.stocksList)
 
         # 4DEBUG
-        # self.stocksList = ['BGH']
+        # self.stocksList = ['GSM', 'DRD']
 
         for symbolName in self.stocksList:
             # stock = Stock(name=symbolName)

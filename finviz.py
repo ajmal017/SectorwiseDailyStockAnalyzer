@@ -1,12 +1,13 @@
 import requests
-# from urllib.request import Request, urlopen
 from urllib2 import urlopen
 from bs4 import BeautifulSoup
-# from urllib.error import  URLError
 import time
+import re
 # import http.client # for Python 3.x
 import httplib # for Python 2.7.x
 from requests import get  # to make GET request
+
+template = "body=\[<img src='chart\.ashx\?s=m&ty=c&t=(.*)\'>.*quote.*&nbsp;(.*) \|.*\|.*"
 
 def download(url):
     # open in binary mode
@@ -20,35 +21,44 @@ def getFinviz(base_url):
     done = False
     url = base_url
     info = []
+    last_stock = []
 
     html = download(url)
+    stock_sub_sector = re.findall(template, html)
 
     while (not done):
-        soup = BeautifulSoup(html, "html.parser")
+        # soup = BeautifulSoup(html, "html.parser")
 
         data = []
-        new_info = []
-        for link in soup.find_all('a'):
-            data.append(link.get('href'))
+        # new_info = []
+        # for link in soup.find_all('a'):
+        #     data.append(link.get('href'))
 
-        for element in list(set(data)):
-            if "quote.ashx?t=" in element:
-                new_info.append(element[element.find("?t=") + 3:element.find("&ty")])
+        # for element in list(set(data)):
+        #     if "quote.ashx?t=" in element:
+        #         new_info.append(element[element.find("?t=") + 3:element.find("&ty")])
 
-        # print("new_info: ", new_info)
-        # print("info: ", new_info)
-        # time.sleep(1)
-        if info and new_info[-1] == info[-1]:
+
+        # filter out exhange traded funds
+        for each_element in stock_sub_sector:
+            if not 'Exchange Traded Fund' in each_element[1]:
+                info.append(each_element[0])
+
+        # loop end condition
+        if info and last_stock and info[-1] == last_stock:
             break
-        for each_element in new_info:
-            info.append(each_element)
+
+        # print "info: ", info
 
         url = ''.join((base_url.rstrip('\n'),"&r=",str(k * initIttr + 1)))
-        # print("URL: ", url)
-        k = k + 1
+        k += 1
+        # print "url: ", url
 
-        # print("Still working on GET: ", k)
+        last_stock = info[-1]
+        # print "last_stock: ", last_stock
+
         html = []
         html = download(url)
+        stock_sub_sector = re.findall(template, html)
 
-    return set(info)
+    return sorted(set(info))
