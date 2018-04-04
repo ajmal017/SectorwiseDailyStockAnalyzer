@@ -5,6 +5,8 @@ from finviz import getFinviz
 from terminaltables import AsciiTable
 from Config import *
 import logging
+import argparse
+import sys
 import time
 import csv
 import urllib
@@ -36,6 +38,7 @@ class IntersectBasedAnalysisClass:
 
     def getSectorsData(self):
         for sector in self.sectors_list:
+            logger.info("Getting %s data..." % (sector,))
             logger.debug('#### Start handling %s ####', sector)
             self.stock.getData(i_symbol=sector, i_destDictKey=sector)
             self.stock.getMovementType(i_destDictKey=sector, i_freq='d')
@@ -51,6 +54,7 @@ class IntersectBasedAnalysisClass:
             logger.debug('#### End handling %s ####', sector)
 
     def getSpyData(self):
+        logger.info("Getting SPY data...")
         logger.debug("#### Start handling SPY ####")
         self.out_file.write("#### Start handling SPY ####\n")
 
@@ -66,9 +70,10 @@ class IntersectBasedAnalysisClass:
         logger.debug("#### End handling SPY ####")
         self.out_file.write("#### End handling SPY ####\n")
 
-    def rateSectors(self):
+    def rateSectors(self, args):
         idx = 0
         for sector in self.sectors_list:
+            logger.info("Rating sector %s..." % (sector, ))
             rating = 0
             # self.stock.plotlyData(i_destDictKey=sector)
 
@@ -134,7 +139,7 @@ class IntersectBasedAnalysisClass:
         for sector in self.sectors_list:
             logger.info("rating[%s]: %d", sector, self.sectors_rating[idx])
             rating = self.sectors_rating[idx]
-            if rating >= ANALYSIS_THS:
+            if rating >= ANALYSIS_THS or args['_all']:
                 self.sectors_to_analyze.append(idx)
                 table_data.append([sector, str(rating) + '/' + str(RATE_1_SCORE+RATE_2_SCORE+RATE_3_SCORE+RATE_4_SCORE)])
             idx += 1
@@ -153,6 +158,7 @@ class IntersectBasedAnalysisClass:
             self.out_file.write("%s:%f\n" % (self.sectors_list[sector], self.sectors_rating[sector]))
 
     def checkIfUpdate(self):
+        logger.info("Checking if DB update is needed...")
         # day = datetime.today().day
         lastEntryDate = self.stock.getDataDate()
         logger.info("Last entry date: %d/%d", lastEntryDate.day, lastEntryDate.month)
@@ -539,57 +545,74 @@ class IntersectBasedAnalysisClass:
             logger.debug('#### End handling [%s] ####', symbolName)
             self.debug_buffers[index].append("#### End handling [ %s ] ####\n" % symbolName)
 
-    def analyze_sectors(self):
+    def output_tables(self):
         global sectorsPassingCond
         global errorStocks
 
-        # for holding in sectorHoldingsUrls:
-        for index in self.sectors_to_analyze:
-            self.analyze_sector(index)
-
-        for buff in self.debug_buffers:
-            for debug in buff:
-                self.out_file.write(debug)
-
-        logger.info('\n')
-        self.out_file.write('\n')
         stocksRankingTable = AsciiTable(sectorsPassingCond)
         stocksRankingTable.inner_heading_row_border = True
+        logger.info('\n')
+        logger.info('Potential candidates:')
         logger.info(stocksRankingTable.table)
+        self.out_file.write('\n')
+        self.out_file.write('Potential candidates:\n')
         self.out_file.write(stocksRankingTable.table)
 
         errorStocksTable = AsciiTable(errorStocks)
         errorStocksTable.inner_heading_row_border = True
         logger.info('\n')
-        logger.info('Stocks with ERRORs')
+        logger.info('Stocks with ERRORs:')
         logger.info(errorStocksTable.table)
         self.out_file.write('\n')
-        self.out_file.write('Stocks with ERRORs\n')
+        self.out_file.write('Stocks with ERRORs:\n')
         self.out_file.write(errorStocksTable.table)
+
+    def analyze_sectors(self, args):
+        global sectorsPassingCond
+        global errorStocks
+
+        # for holding in sectorHoldingsUrls:
+        for index in self.sectors_to_analyze:
+            if args['_single']:
+                var = raw_input("Press enter to proceed with next sector analysis..." )
+            self.analyze_sector(index)
+            self.output_tables()
+
+        for buff in self.debug_buffers:
+            for debug in buff:
+                self.out_file.write(debug)
+
+        self.output_tables()
 
     def restoreSymbol(self, i_symbol):
         self.stocks4Analysis = load_obj(i_symbol)
 
     def main(self):
         # while True:
-            dayOfWeek = datetime.today().weekday()
-            hour = datetime.today().hour
-            minute = datetime.today().minute
-            # if (dayOfWeek >= 1) and (dayOfWeek <= 5) and ((hour+3) == 14) and (minute == 00):
-            if (1):
-                filename = 'output_' + str(now.day) + '_' + str(now.month) + '_' + str(now.year) + '_' + str(now.hour) + '.txt'
-                self.out_file = open(filename, "w")
-                self.debug_buffers = [[], [], [], [], [], [], [], [], []]
-                self.getSpyData()
-                self.getSectorsData()
-                self.checkIfUpdate()
-                # narrow down the list of sectors for analysis
-                self.rateSectors()
-                self.analyze_sectors()
-                self.out_file.close()
-            else:
-                logger.warning('DaylOfWeek: %s hour: %s minute: %s sleep 60s - waiting...', str(dayOfWeek), str(hour+3), str(minute))
-                time.sleep(60)
+        parser = argparse.ArgumentParser(description='Daily Stock Analyzer')
+        parser.add_argument('-s', dest="_single", action="store_true", help='Prompt user on single sector analysis', default=False)
+        parser.add_argument('-a',dest="_all", action="store_true", help='Analyze all potential sectors', default=False)
+        args = vars(parser.parse_args())
+        logging.info('Input parameters %s' % (args, ))
+
+        dayOfWeek = datetime.today().weekday()
+        hour = datetime.today().hour
+        minute = datetime.today().minute
+        # if (dayOfWeek >= 1) and (dayOfWeek <= 5) and ((hour+3) == 14) and (minute == 00):
+        if (1):
+            filename = 'output_' + str(now.day) + '_' + str(now.month) + '_' + str(now.year) + '_' + str(now.hour) + '.txt'
+            self.out_file = open(filename, "w")
+            self.debug_buffers = [[], [], [], [], [], [], [], [], []]
+            self.getSpyData()
+            self.getSectorsData()
+            self.checkIfUpdate()
+            # narrow down the list of sectors for analysis
+            self.rateSectors(args)
+            self.analyze_sectors(args)
+            self.out_file.close()
+        else:
+            logger.warning('DaylOfWeek: %s hour: %s minute: %s sleep 60s - waiting...', str(dayOfWeek), str(hour+3), str(minute))
+            time.sleep(60)
 
 # ----------------- Main program -------------------
 # os.system("taskkill /im python.exe")
