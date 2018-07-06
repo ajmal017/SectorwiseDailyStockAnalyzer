@@ -1,5 +1,7 @@
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
+# import matplotlib.dates as mdates
+# import matplotlib.pyplot as plt
+import pandas as pd
+pd.core.common.is_list_like = pd.api.types.is_list_like
 import pandas_datareader.data as web
 # import fix_yahoo_finance as yf
 import pandas as pd
@@ -24,7 +26,7 @@ import calendar
 np.seterr(all='raise')
 # yf.pdr_override() # fixes the yahoo finance issue
 plotly.offline.init_notebook_mode(connected=True)
-plt.style.use('ggplot')
+# plt.style.use('ggplot')
 
 
 class StockClass:

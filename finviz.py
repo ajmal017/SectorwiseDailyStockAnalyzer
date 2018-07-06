@@ -1,10 +1,12 @@
 import requests
-from urllib2 import urlopen
+# from urllib2 import urlopen
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import time
 import re
 # import http.client # for Python 3.x
-import httplib # for Python 2.7.x
+# import httplib # for Python 2.7.x
+# import httplib.client # for Python 3.6.x
 from requests import get  # to make GET request
 
 template = "body=\[<img src='chart\.ashx\?s=m&ty=c&t=(.*)\'>.*quote.*&nbsp;(.*) \|.*\|.*"

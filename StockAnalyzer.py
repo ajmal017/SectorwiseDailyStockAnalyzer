@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 class IntersectBasedAnalysisClass:
 
+    data_folder = "\\data\\"
     stocksList = []
     numStocksInList = 0
     stock = StockClass()
@@ -165,7 +166,7 @@ class IntersectBasedAnalysisClass:
         self.out_file.write("Last entry's day: %d/%d\n" % (lastEntryDate.day, lastEntryDate.month))
 
     def can_read_list_from_file(self, sector):
-        filename = "%s.dat" % sector
+        filename = "%s%s.dat" % (self.data_folder, sector)
         current_time = datetime.today()
         current_month = current_time.month
         if os.path.isfile(filename):
@@ -178,13 +179,13 @@ class IntersectBasedAnalysisClass:
                 return False
 
     def read_list_from_file(self, sector):
-        filename = "%s.dat" % sector
+        filename = "%s%s.dat" % (self.data_folder, sector)
         with open(filename, "r") as f:
             list = f.read().splitlines()
             return set(list)
 
     def write_to_file(self, sector, lst):
-        filename = "%s.dat" % sector
+        filename = "%s%s.dat" % (self.data_folder, sector)
         with open(filename, "w") as f:
             for item in lst:
                 f.write("%s\n" % item)
@@ -196,9 +197,9 @@ class IntersectBasedAnalysisClass:
         global errorStocks
 
         if SECTORS_SET == iSHARES_SECTORS:
-            f = open('SectorHoldings.dat', 'r')
+            f = open(self.data_folder + 'SectorHoldings.dat', 'r')
         elif SECTORS_SET == nINESECTORS:
-            f = open('FinvizSectors.dat', 'r')
+            f = open(self.data_folder + 'FinvizSectors.dat', 'r')
 
         sectorHoldingsUrls = f.readlines()
         holding = sectorHoldingsUrls[index]
@@ -601,7 +602,7 @@ class IntersectBasedAnalysisClass:
         # if (dayOfWeek >= 1) and (dayOfWeek <= 5) and ((hour+3) == 14) and (minute == 00):
         if (1):
             filename = 'output_' + str(now.day) + '_' + str(now.month) + '_' + str(now.year) + '_' + str(now.hour) + '.txt'
-            self.out_file = open(filename, "w")
+            self.out_file = open("logs\\" + filename, "w")
             self.debug_buffers = [[], [], [], [], [], [], [], [], []]
             self.getSpyData()
             self.getSectorsData()
