@@ -1,9 +1,9 @@
-from Stock import *
-from Utils import *
+from stock import *
+from utils import *
 from pandas import DataFrame
 from finviz import getFinviz
 from terminaltables import AsciiTable
-from Config import *
+from config import *
 import logging
 import argparse
 import sys

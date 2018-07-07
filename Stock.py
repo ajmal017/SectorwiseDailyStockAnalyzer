@@ -1,17 +1,16 @@
-# import matplotlib.dates as mdates
-# import matplotlib.pyplot as plt
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
 import pandas_datareader.data as web
-# import fix_yahoo_finance as yf
-import pandas as pd
 import numpy as np
 import plotly
 from numpy import *
 from plotly.tools import FigureFactory as FF
 from plotly.graph_objs import *
-from DataStructures import Data
-from Config import *
+from data_structures import Data
+from config import *
+import matplotlib
+import calendar
+
 # from pandas_datareader import data, wb
 # from pprint import pprint
 # from ggplot import *
@@ -20,12 +19,13 @@ from Config import *
 # from yahoo_finance import Share
 # from matplotlib.finance import candlestick_ochl, candlestick2_ochl
 # from scipy.signal import argrelextrema
-import matplotlib
-import calendar
+# import fix_yahoo_finance as yf
+# import matplotlib.dates as mdates
+# import matplotlib.pyplot as plt
 
 np.seterr(all='raise')
 # yf.pdr_override() # fixes the yahoo finance issue
-plotly.offline.init_notebook_mode(connected=True)
+# plotly.offline.init_notebook_mode(connected=True)
 # plt.style.use('ggplot')
 
 
@@ -804,7 +804,8 @@ class StockClass:
                 newK = -1  # meaning that previous extrimum was minimum too
             else:
                 try:
-                    newK = l_dataLow[maxIndex + 1:i_k + 1].argmin()
+                    # newK = l_dataLow[maxIndex + 1:i_k + 1].argmin()
+                    newK = l_dataLow[maxIndex + 1:i_k + 1].idxmin()
                     # newK = maxIndex + newK
                     # print("newK: ", newK)
                 except:
@@ -831,7 +832,8 @@ class StockClass:
                 newK = -1  # meaning that previous extrimum was minimum too
             else:
                 try:
-                    newK = l_dataHigh[maxIndex + 1:i_k + 1].argmax()
+                    # newK = l_dataHigh[maxIndex + 1:i_k + 1].argmax()
+                    newK = l_dataHigh[maxIndex + 1:i_k + 1].idxmax()
                     # newK = maxIndex + newK
                 except:
                     newK = i_k
